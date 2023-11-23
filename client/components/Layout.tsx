@@ -11,14 +11,19 @@ function Layout() {
 
   return (
     <div>
-      <h1 onClick={handleBurgerMenuClick}>Sales Ledger</h1>
+      <h1 onClick={handleBurgerMenuClick} className="bg-red-200">
+        Sales Ledger
+      </h1>
       <div className="burgermenu-container">
         {burgerMenuClick ? (
           <>
             <BurgerMenu />
           </>
         ) : (
-          <span className="burgermenu" onClick={handleBurgerMenuClick}>
+          <span
+            className="burgermenu float-right"
+            onClick={handleBurgerMenuClick}
+          >
             dsad
           </span>
         )}
