@@ -1,7 +1,7 @@
-import React from 'react'
+import BuyorSell from './BuyorSell'
 
 function Home() {
-  return <div>Home</div>
+  return <BuyorSell />
 }
 
 export default Home

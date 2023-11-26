@@ -1,17 +1,24 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 
-function BurgerMenu() {
+interface Props {
+  burgermenuclick: React.Dispatch<React.SetStateAction<boolean>>
+}
+
+function BurgerMenu(props: Props) {
   return (
     <div>
       <ul className="float-right">
         <li>
-          <a href="#">Add Item</a>
+          <Link to="/" onClick={() => props.burgermenuclick()}>
+            Add Item
+          </Link>
         </li>
         <li>
-          <a href="#">Inventory</a>
+          <Link to="/inventory">Inventory</Link>
         </li>
         <li>
-          <a href="#">The Ledger</a>
+          <Link to="theledger">The Ledger</Link>
         </li>
         <li>
           <a href="#">Account</a>

@@ -1,5 +1,7 @@
 import React, { useState } from 'react'
 import BurgerMenu from './BurgerMenu'
+import { Outlet } from 'react-router-dom'
+import Footer from './Footer'
 
 function Layout() {
   const [burgerMenuClick, setBurgerMenuClick] = useState(false)
@@ -17,7 +19,7 @@ function Layout() {
       <div className="burgermenu-container">
         {burgerMenuClick ? (
           <>
-            <BurgerMenu />
+            <BurgerMenu burgermenuclick={setBurgerMenuClick} />
           </>
         ) : (
           <span
@@ -28,6 +30,8 @@ function Layout() {
           </span>
         )}
       </div>
+      <Outlet />
+      <Footer />
     </div>
   )
 }
