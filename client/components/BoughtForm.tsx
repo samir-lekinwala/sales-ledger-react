@@ -8,23 +8,23 @@ function BoughtForm() {
 
     const target = event.currentTarget
     const form = new FormData(target)
-    const itemBought = form.get('itembought')?.valueOf() as string
-    const howMuch = form.get('howmuch')?.valueOf() as string
+    const item = form.get('itembought')?.valueOf() as string
+    const price = form.get('howmuch')?.valueOf() as string
     const shipping = form.get('shipping')?.valueOf() as number
     // const inStock = form.get('inStock')?.valueOf() as number
 
     const completedBoughtForm = {
-      itemBought,
-      howMuch,
-      shipping,
+      item,
+      price,
+      // shipping,
     }
-    console.log(completedBoughtForm)
     await postFormData(completedBoughtForm)
+    target.reset()
   }
-  function handleButtonClick(e) {
-    e.preventDefault()
-    console.log('hbdsahjd')
-  }
+
+  // function handleButtonClick(e) {
+  //   e.preventDefault()
+  // }
 
   return (
     <div>
@@ -53,7 +53,7 @@ function BoughtForm() {
           name="shipping"
           placeholder="Any shipping cost?"
         ></input>
-        <button onClick={(e) => handleButtonClick(e)}>Submit</button>
+        <button>Submit</button>
       </form>
     </div>
   )

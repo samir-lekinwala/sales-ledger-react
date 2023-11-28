@@ -8,19 +8,20 @@ router.get('/', async (req, res) => {
   try {
     const fruits = await db.getAllItems()
 
-    res.json({ fruits: fruits.map((fruit) => fruit.name) })
+    res.json(fruits)
   } catch (error) {
     console.log(error)
     res.status(500).json({ message: 'Something went wrong' })
   }
 })
-router.post('/bought', async (req, res) => {
-  try {
-    const dataCheck = res.body
-    console.log(dataCheck)
-    const data = await db.getAllItems()
 
-    res.json({ fruits: fruits.map((fruit) => fruit.name) })
+router.post('/', async (req, res) => {
+  try {
+    const dataCheck = await req.body
+    console.log(dataCheck)
+    await db.addItem(dataCheck)
+
+    res.sendStatus(201)
   } catch (error) {
     console.log(error)
     res.status(500).json({ message: 'Something went wrong' })
