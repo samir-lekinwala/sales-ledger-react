@@ -11,12 +11,14 @@ function BoughtForm() {
     const item = form.get('itembought')?.valueOf() as string
     const price = form.get('howmuch')?.valueOf() as string
     const shipping = form.get('shipping')?.valueOf() as number
+    const soldOrBought = 'bought'
     // const inStock = form.get('inStock')?.valueOf() as number
 
     const completedBoughtForm = {
       item,
       price,
-      // shipping,
+      soldOrBought,
+      shipping,
     }
     await postFormData(completedBoughtForm)
     target.reset()

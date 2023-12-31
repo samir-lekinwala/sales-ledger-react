@@ -2,7 +2,8 @@ import React from 'react'
 import { getAllItems } from '../apis/fruits'
 import { useQuery } from '@tanstack/react-query'
 import LedgerTable from '../components/LedgerTable'
-import Footer from '../components/Footer'
+import Footer from '../components/LedgerFooter'
+import LedgerFooter from '../components/LedgerFooter'
 
 function TheLedger() {
   const { data, isLoading, isError, error } = useQuery({
@@ -15,7 +16,7 @@ function TheLedger() {
   return (
     <div>
       <LedgerTable data={data.body} />
-      <Footer data={data.body} />
+      <LedgerFooter data={data.body} />
     </div>
   )
 }

@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import BurgerMenu from './BurgerMenu'
 import { Outlet } from 'react-router-dom'
-import Footer from './Footer'
+import Footer from './LedgerFooter'
 
 function Layout() {
   const [burgerMenuClick, setBurgerMenuClick] = useState(false)
@@ -35,7 +35,7 @@ function Layout() {
         )} */}
       </div>
       <Outlet />
-      <Footer />
+      {/* <Footer /> */}
     </div>
   )
 }

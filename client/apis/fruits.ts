@@ -8,3 +8,6 @@ export async function postFormData(data) {
 export async function getAllItems() {
   return request.get(rootUrl + '/bought')
 }
+export async function deleteItem(id: number) {
+  return request.delete(rootUrl + `/${id}`)
+}

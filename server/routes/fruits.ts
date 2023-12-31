@@ -27,5 +27,18 @@ router.post('/', async (req, res) => {
     res.status(500).json({ message: 'Something went wrong' })
   }
 })
+router.delete('/delete/:id', async (req, res) => {
+  try {
+    const id = req.params.id
+    // const dataCheck = await req.body
+    console.log(id)
+    await db.addItem(dataCheck)
+
+    res.sendStatus(201)
+  } catch (error) {
+    console.log(error)
+    res.status(500).json({ message: 'Something went wrong' })
+  }
+})
 
 export default router
