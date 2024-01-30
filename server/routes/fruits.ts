@@ -31,10 +31,10 @@ router.delete('/delete/:id', async (req, res) => {
   try {
     const id = req.params.id
     // const dataCheck = await req.body
-    console.log(id)
-    await db.addItem(dataCheck)
+    console.log('route test', id)
+    await db.deleteItem(Number(id))
 
-    res.sendStatus(201)
+    res.sendStatus(200)
   } catch (error) {
     console.log(error)
     res.status(500).json({ message: 'Something went wrong' })

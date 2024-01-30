@@ -9,3 +9,7 @@ export async function addItem(data) {
   console.log(data)
   return db('items').insert(data)
 }
+export async function deleteItem(id: number) {
+  console.log('pretend to delete ', id)
+  return db('items').where('id', id).del()
+}

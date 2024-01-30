@@ -1,5 +1,6 @@
 // import React from 'react'
 
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { postFormData } from '../apis/fruits'
 
 function BoughtForm() {
@@ -20,9 +21,22 @@ function BoughtForm() {
       soldOrBought,
       shipping,
     }
-    await postFormData(completedBoughtForm)
+    // await postFormData(completedBoughtForm)
+    mutateAddBoughtTransaction.mutate(completedBoughtForm)
     target.reset()
   }
+  const queryClient = useQueryClient()
+  const mutateAddBoughtTransaction = useMutation({
+    mutationFn: (completedBoughtForm: {
+      item: string
+      price: string
+      soldOrBought: string
+      shipping: number
+    }) => postFormData(completedBoughtForm),
+    onSuccess: () => {
+      queryClient.invalidateQueries(['items'])
+    },
+  })
 
   // function handleButtonClick(e) {
   //   e.preventDefault()

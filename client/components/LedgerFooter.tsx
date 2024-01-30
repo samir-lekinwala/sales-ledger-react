@@ -1,33 +1,26 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import * as models from '../models/items'
-import { useQuery, useQueryClient } from '@tanstack/react-query'
+import { useQuery, useQueryClient, useMutation } from '@tanstack/react-query'
 
 interface Props {
   data: models.item[]
 }
 
 function LedgerFooter(props: Props) {
+  const [boughtAndSold, setBoughtAndSold] = useState({
+    boughtTotal: 0,
+    soldTotal: 0,
+    profit: 0,
+  })
+
   const { data } = props
   console.log('from the ledger', data)
 
-  const {
-    data: boughtAndSold,
-    isLoading,
-    isError,
-    error,
-  } = useQuery({
-    queryKey: ['boughtAndSold'],
-    queryFn: getTotalBoughtAndSold,
-  })
-  if (isLoading) return <h1>Loading...</h1>
-  if (isError) return console.error(error)
-
   // const queryClient = useQueryClient()
-  // useEffect(() => {
-  //   // Invalidate relevant queries when type or id changes
-  //   // getTotalBoughtAndSold
-  //   queryClient.invalidateQueries(['boughtAndSold'])
-  // }, [data])
+  useEffect(() => {
+    //reruns totalboughtandsold when data changes
+    getTotalBoughtAndSold()
+  }, [data])
 
   function getTotalBoughtAndSold() {
     let boughtTotal = 0
@@ -45,6 +38,8 @@ function LedgerFooter(props: Props) {
       profit: boughtTotal - soldTotal,
     }
     console.log('totals', totals)
+    setBoughtAndSold(totals)
+    console.log('state', boughtAndSold)
     return totals
   }
 
@@ -86,19 +81,19 @@ function LedgerFooter(props: Props) {
                 scope="row"
                 className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
               >
-                {boughtAndSold.soldTotal}
+                {boughtAndSold?.soldTotal}
               </th>
               <th
                 scope="row"
                 className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
               >
-                {boughtAndSold.boughtTotal}
+                {boughtAndSold?.boughtTotal}
               </th>
               <th
                 scope="row"
                 className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
               >
-                {boughtAndSold.profit}
+                {boughtAndSold?.profit}
               </th>
               {/* <td>{item.created_at}</td>
                 <td>{item.price}</td>
