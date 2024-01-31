@@ -1,5 +1,11 @@
+import SoldForm from '../components/SoldForm'
+
 function Sold() {
-  return <div>Sold</div>
+  return (
+    <div>
+      <SoldForm />
+    </div>
+  )
 }
 
 export default Sold

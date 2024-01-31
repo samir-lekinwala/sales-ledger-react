@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom'
 
 function BuyorSell() {
   return (
-    <ul>
+    <ul className="text-white">
       <li>
         <Link to={`/bought`}>Bought</Link>
       </li>

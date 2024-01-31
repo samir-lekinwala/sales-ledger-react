@@ -18,7 +18,6 @@ function LedgerTable(props: Props) {
     mutationFn: (id: number) => deleteItem(id),
     onSuccess: () => {
       queryClient.invalidateQueries(['items'])
-      // queryClient.invalidateQueries(['boughtAndSold', 'items', data])
     },
   })
 

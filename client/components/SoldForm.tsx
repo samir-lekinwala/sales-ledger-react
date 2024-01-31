@@ -1,18 +1,18 @@
-// import React from 'react'
-
 import { useMutation, useQueryClient } from '@tanstack/react-query'
+import React from 'react'
 import { postFormData } from '../apis/fruits'
 
-function BoughtForm() {
+function SoldForm() {
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
 
     const target = event.currentTarget
     const form = new FormData(target)
-    const item = form.get('itembought')?.valueOf() as string
+    const item = form.get('itemsold')?.valueOf() as string
     const price = form.get('howmuch')?.valueOf() as string
+    const platform = form.get('fees')?.valueOf() as string
     const shipping = form.get('shipping')?.valueOf() as number
-    const soldOrBought = 'bought'
+    const soldOrBought = 'sold'
     // const inStock = form.get('inStock')?.valueOf() as number
 
     const completedBoughtForm = {
@@ -20,6 +20,7 @@ function BoughtForm() {
       price,
       soldOrBought,
       shipping,
+      platform,
     }
     // await postFormData(completedBoughtForm)
     mutateAddBoughtTransaction.mutate(completedBoughtForm)
@@ -31,6 +32,7 @@ function BoughtForm() {
       item: string
       price: string
       soldOrBought: string
+      platform: string
       shipping: number
     }) => postFormData(completedBoughtForm),
     onSuccess: () => {
@@ -45,15 +47,15 @@ function BoughtForm() {
   return (
     <div>
       <form onSubmit={(e) => handleSubmit(e)}>
-        <label className="text-white" htmlFor="itembought">
-          Item bought
+        <label className="text-white" htmlFor="itemsold">
+          Item sold
         </label>
         <input
           className="block w-half p-4 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-md focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
           type="text"
-          id="itembought"
-          name="itembought"
-          placeholder="What have you bought?"
+          id="itemsold"
+          name="itemsold"
+          placeholder="What have you sold?"
         ></input>
         <label className="text-white" htmlFor="howmuch">
           For how much?
@@ -65,9 +67,22 @@ function BoughtForm() {
           name="howmuch"
           placeholder="For how much?"
         ></input>
-        <label className="text-white" htmlFor="shipping">
-          Any shipping cost?
+        <label
+          htmlFor="fees"
+          className="block w-half mb-2 text-sm font-medium text-gray-900 dark:text-white"
+        >
+          Select an option
         </label>
+        <select
+          id="fees"
+          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-half p-4 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+        >
+          <option selected>Choose an option</option>
+          <option value="trademe">TradeMe</option>
+          <option value="facebook">Facebook</option>
+          <option value="custom">Custom fee</option>
+          <option value="nofee">No fee</option>
+        </select>
         <input
           className="block w-half p-4 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-md focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
           type="number"
@@ -83,4 +98,4 @@ function BoughtForm() {
   )
 }
 
-export default BoughtForm
+export default SoldForm
