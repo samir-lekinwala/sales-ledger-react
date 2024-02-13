@@ -2,7 +2,18 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import React from 'react'
 import { postFormData } from '../apis/fruits'
 
+interface CompletedSoldForm {
+  item: string
+  price: number
+  soldOrBought: string
+  shipping: number
+  platform: string
+  fee: number
+}
+
 function SoldForm() {
+  const trademeFee = 0.079 //7.9%
+
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
 
@@ -13,27 +24,32 @@ function SoldForm() {
     const platform = form.get('fees')?.valueOf() as string
     const shipping = form.get('shipping')?.valueOf() as number
     const soldOrBought = 'sold'
+    const fee = feeCalculation(platform, Number(price)) as number
     // const inStock = form.get('inStock')?.valueOf() as number
 
-    const completedBoughtForm = {
+    const completedSoldForm = {
       item,
       price,
       soldOrBought,
       shipping,
       platform,
+      fee,
     }
+
     // await postFormData(completedBoughtForm)
-    mutateAddBoughtTransaction.mutate(completedBoughtForm)
+    console.log(platform)
+    mutateAddSoldTransaction.mutate(completedSoldForm)
     target.reset()
   }
   const queryClient = useQueryClient()
-  const mutateAddBoughtTransaction = useMutation({
+  const mutateAddSoldTransaction = useMutation({
     mutationFn: (completedBoughtForm: {
       item: string
       price: string
       soldOrBought: string
       platform: string
       shipping: number
+      fee: number
     }) => postFormData(completedBoughtForm),
     onSuccess: () => {
       queryClient.invalidateQueries(['items'])
@@ -43,6 +59,18 @@ function SoldForm() {
   // function handleButtonClick(e) {
   //   e.preventDefault()
   // }
+
+  function feeCalculation(platform: string, price: number) {
+    let fee = 0
+
+    if (platform === 'trademe') {
+      fee = Number(price * trademeFee).toFixed(2)
+    } else if (platform === 'facebook') {
+      return
+    }
+    console.log(fee)
+    return fee
+  }
 
   return (
     <div>
@@ -75,9 +103,10 @@ function SoldForm() {
         </label>
         <select
           id="fees"
+          name="fees"
           className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-half p-4 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
         >
-          <option selected>Choose an option</option>
+          <option defaultValue={'none'}>Choose an option</option>
           <option value="trademe">TradeMe</option>
           <option value="facebook">Facebook</option>
           <option value="custom">Custom fee</option>

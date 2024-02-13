@@ -14,7 +14,7 @@ function LedgerFooter(props: Props) {
   })
 
   const { data } = props
-  console.log('from the ledger', data)
+  // console.log('from the ledger', data)
 
   // const queryClient = useQueryClient()
   useEffect(() => {
@@ -37,9 +37,9 @@ function LedgerFooter(props: Props) {
       soldTotal: soldTotal,
       profit: boughtTotal - soldTotal,
     }
-    console.log('totals', totals)
+    // console.log('totals', totals)
     setBoughtAndSold(totals)
-    console.log('state', boughtAndSold)
+    // console.log('state', boughtAndSold)
     return totals
   }
 

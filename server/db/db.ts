@@ -6,7 +6,7 @@ export async function getAllItems() {
 }
 
 export async function addItem(data) {
-  console.log(data)
+  console.log('db function for adding', data)
   return db('items').insert(data)
 }
 export async function deleteItem(id: number) {

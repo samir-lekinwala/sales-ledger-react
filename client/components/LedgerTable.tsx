@@ -39,8 +39,9 @@ function LedgerTable(props: Props) {
               <th>Date Created</th>
               <th>Price</th>
               <th>Fees / Shipping</th>
+              <th>Price after Fees/Shipping</th>
               <th>Platform</th>
-              <th>Bought</th>
+              <th>Sold / Bought</th>
             </tr>
           </thead>
           <tbody>
@@ -63,6 +64,7 @@ function LedgerTable(props: Props) {
                 </th>
                 <td>{item.created_at}</td>
                 <td>{item.price}</td>
+                <td>{item.shipping}</td>
                 <td>{item.shipping}</td>
                 <td>{item.platform}</td>
                 <td>{item.soldOrBought}</td>
