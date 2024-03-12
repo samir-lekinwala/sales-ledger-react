@@ -2,6 +2,7 @@
 
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { postFormData } from '../apis/fruits'
+import { Link } from 'react-router-dom'
 
 function BoughtForm() {
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
@@ -73,12 +74,16 @@ function BoughtForm() {
           type="number"
           id="shipping"
           name="shipping"
+          step={0.01}
           placeholder="Any shipping cost?"
         ></input>
         <button className="group-hover:opacity-100 ml-1 mt-5 text-red-700 hover:text-white border border-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:hover:bg-red-600 dark:focus:ring-red-900">
           Submit
         </button>
       </form>
+      <button className="group-hover:opacity-100 ml-1 mt-5 text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-600 dark:focus:ring-blue-900">
+        <Link to={`/theledger`}>View Ledger</Link>
+      </button>
     </div>
   )
 }

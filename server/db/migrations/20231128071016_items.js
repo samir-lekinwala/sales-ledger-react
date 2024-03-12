@@ -4,6 +4,8 @@ export async function up(knex) {
     table.string('item')
     table.integer('price')
     table.integer('shipping').defaultTo('0')
+    table.integer('feePercentage').defaultTo('0')
+    table.integer('feeDollar').defaultTo('0')
     table.integer('user_id')
     table.string('platform')
     table.string('soldOrBought')

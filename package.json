@@ -18,6 +18,7 @@
     "build:server": "esbuild --packages=external --platform=node --format=esm --outfile=dist/server.js --bundle server/index.ts",
     "lint": "eslint --ext .js,.jsx,.ts,.tsx .",
     "knex": "knex --knexfile ./server/db/knexfile.js",
+    "restart": "npm run knex migrate:latest && npm run knex seed:run",
     "dev:css": "tailwindcss -i ./client/styles/main.css -o ./dist/output.css --watch"
   },
   "eslintConfig": {

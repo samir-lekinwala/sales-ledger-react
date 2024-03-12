@@ -1,8 +1,9 @@
 import request from 'superagent'
+import * as models from '../models/items.tsx'
 
 const rootUrl = '/api/v1'
 
-export async function postFormData(data) {
+export async function postFormData(data: models.item) {
   return request.post(rootUrl + '/bought').send(data)
 }
 export async function getAllItems() {
