@@ -22,7 +22,7 @@
     "lint": "eslint --ext .js,.jsx,.ts,.tsx .",
     "knex": "knex --knexfile ./server/db/knexfile.js",
     "restart": "npm run knex migrate:latest && npm run knex seed:run",
-    "dev:css": "tailwindcss -i ./client/styles/main.css -o ./dist/output.css --watch"
+    "dev:css": "tailwindcss -i ./client/styles/main.css -o ./output.css --watch"
   },
   "eslintConfig": {
     "extends": "@devacademy/eslint-config/react",
