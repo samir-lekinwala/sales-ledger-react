@@ -3,10 +3,15 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 
 import App from './components/App.tsx'
-import { RouterProvider, createBrowserRouter } from 'react-router-dom'
+import {
+  RouterProvider,
+  createBrowserRouter,
+  createHashRouter,
+} from 'react-router-dom'
 import routes from './routes.tsx'
 
-const router = createBrowserRouter(routes)
+// const router = createBrowserRouter(routes)
+const router = createHashRouter(routes)
 const queryClient = new QueryClient()
 
 document.addEventListener('DOMContentLoaded', () => {
