@@ -40,10 +40,10 @@ export default {
       ssl: { rejectUnauthorized: false },
     },
     migrations: {
-      directory: __dirname + '/db/migrations',
+      directory: __dirname + '/migrations',
     },
     seeds: {
-      directory: __dirname + '/db/seeds',
+      directory: __dirname + '/seeds',
     },
   },
 
