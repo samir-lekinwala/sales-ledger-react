@@ -40,6 +40,7 @@ export default {
       database: 'dcb2t9psm8iauj',
       port: '5432',
       user: 'u1j6j4g714ckml',
+      ssl: true,
       password:
         'p6938a618a4d6c16a2e238ba507a00b13d15426a5aa0fdc9ecf0832732e17eb09',
     },
