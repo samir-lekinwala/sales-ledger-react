@@ -36,6 +36,7 @@ export default {
   production: {
     client: 'postgresql',
     connection: {
+      host: 'ceu9lmqblp8t3q.cluster-czrs8kj4isg7.us-east-1.rds.amazonaws.com',
       database: 'dcb2t9psm8iauj',
       user: 'u1j6j4g714ckml',
       password:
