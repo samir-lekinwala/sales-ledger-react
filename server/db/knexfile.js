@@ -55,7 +55,7 @@ export default {
       max: 10,
     },
     migrations: {
-      directory: __dirname + '/db/migrations',
+      directory: __dirname + '/migrations',
     },
   },
 
