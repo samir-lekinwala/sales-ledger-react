@@ -106,7 +106,7 @@ function LedgerTable(props: Props) {
           <td className="px-3 text-white">
             $
             {
-              calculateFeesTotal(item)
+              calculateFeesTotal(item).toFixed(2)
               // item.price - item.shipping - fee
             }
           </td>
