@@ -11,7 +11,7 @@ import {
 import routes from './routes.tsx'
 
 // const router = createBrowserRouter(routes)
-const router = createHashRouter(routes)
+const router = createBrowserRouter(routes)
 const queryClient = new QueryClient()
 
 document.addEventListener('DOMContentLoaded', () => {
