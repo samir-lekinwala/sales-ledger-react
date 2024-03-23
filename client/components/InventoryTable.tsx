@@ -2,6 +2,7 @@ import React from 'react'
 import * as models from '../models/items.tsx'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { deleteItem } from '../apis/fruits'
+import moment from 'moment'
 
 interface Props {
   data: models.item[]
@@ -45,7 +46,7 @@ export default function InventoryTable(props: Props) {
             Delete
           </button>
         </th>
-        <td className="px-3">{item.created_at}</td>
+        <td className="px-3">{moment(item.created_at).format('lll')}</td>
         <td className="px-3">${item.price}</td>
         <td className="px-3">${item.shipping}</td>
         {/* need to make below into fee */}

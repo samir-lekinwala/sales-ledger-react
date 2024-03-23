@@ -4,6 +4,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { deleteItem } from '../apis/fruits'
 import LedgerFooter from './LedgerFooter'
 import { dollarOrPercent, calculateFeesTotal } from '../functions/functions.tsx'
+import moment from 'moment'
 
 interface Props {
   data: models.item[]
@@ -93,7 +94,7 @@ function LedgerTable(props: Props) {
             Delete
           </button>
         </th>
-        <td className="px-3">{item.created_at}</td>
+        <td className="px-3">{moment(item.created_at).format('lll')}</td>
         <td className="px-3">${item.price}</td>
         <td className="px-3">${item.shipping}</td>
         {/* need to make below into fee */}
