@@ -1,4 +1,5 @@
 {
+  "homepage": "https://samir-lekinwala.github.io/sales-ledger-react/",
   "name": "boilerplate-fullstack-query",
   "type": "module",
   "version": "2.0.0",
@@ -8,16 +9,20 @@
     "fullstack"
   ],
   "scripts": {
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -b gh-pages -d dist",
     "test": "vitest",
     "start": "node dist/server.js",
-    "dev": "run-p dev:client dev:server",
+    "dev": "run-p dev:client dev:server dev:css",
     "dev:client": "vite",
     "dev:server": "tsx watch server/index.ts",
     "build": "run-s build:client build:server",
     "build:client": "vite build",
     "build:server": "esbuild --packages=external --platform=node --format=esm --outfile=dist/server.js --bundle server/index.ts",
     "lint": "eslint --ext .js,.jsx,.ts,.tsx .",
-    "knex": "knex --knexfile ./server/db/knexfile.js"
+    "knex": "knex --knexfile ./server/db/knexfile.js",
+    "restart": "npm run knex migrate:latest && npm run knex seed:run",
+    "dev:css": "tailwindcss -i ./client/styles/main.css -o ./output.css --watch"
   },
   "eslintConfig": {
     "extends": "@devacademy/eslint-config/react",
@@ -26,8 +31,11 @@
     ]
   },
   "dependencies": {
-    "express": "^4.17.2",
+    "dotenv": "^16.4.5",
+    "express": "^4.18.3",
+    "firebase": "^10.9.0",
     "knex": "^2.5.1",
+    "pg": "^8.11.3",
     "sqlite3": "^5.1.6",
     "superagent": "7.1.1"
   },
@@ -54,13 +62,15 @@
     "eslint-plugin-promise": "^6.0.0",
     "eslint-plugin-react": "^7.29.4",
     "eslint-plugin-react-hooks": "^4.6.0",
+    "gh-pages": "^6.1.1",
     "jsdom": "^22.1.0",
     "npm-run-all": "^4.1.5",
     "react": "^18.0.2",
     "react-dom": "^18.2.0",
-    "react-router-dom": "^6.11.2",
+    "react-router-dom": "^6.20.0",
     "sass": "^1.50.1",
     "supertest": "^6.2.2",
+    "tailwindcss": "^3.3.5",
     "tsx": "^3.12.7",
     "typescript": "^5.1.6",
     "vite": "^4.4.9",

@@ -34,13 +34,27 @@ export default {
   },
 
   production: {
-    client: 'sqlite3',
-    useNullAsDefault: true,
+    client: 'pg',
     connection: {
-      filename: '/app/storage/prod.sqlite3',
+      connectionString: process.env.DATABASE_URL,
+      ssl: { rejectUnauthorized: false },
     },
-    pool: {
-      afterCreate: (conn, cb) => conn.run('PRAGMA foreign_keys = ON', cb),
+    migrations: {
+      directory: __dirname + '/migrations',
+    },
+    seeds: {
+      directory: __dirname + '/seeds',
     },
   },
+
+  // production: {
+  //   client: 'sqlite3',
+  //   useNullAsDefault: true,
+  //   connection: {
+  //     filename: '/app/storage/prod.sqlite3',
+  //   },
+  //   pool: {
+  //     afterCreate: (conn, cb) => conn.run('PRAGMA foreign_keys = ON', cb),
+  //   },
+  // },
 }
