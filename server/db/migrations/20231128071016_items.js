@@ -9,7 +9,7 @@ export async function up(knex) {
     table.integer('user_id')
     table.string('platform')
     table.string('soldOrBought')
-    table.integer('potentialSalePrice')
+    table.integer('potentialSalePrice').defaultTo(0)
     table.timestamp('created_at').defaultTo(knex.fn.now())
   })
 }
