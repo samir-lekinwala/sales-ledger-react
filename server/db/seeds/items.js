@@ -36,6 +36,7 @@ export async function seed(knex) {
       shipping: 10,
       platform: 'trademe',
       soldOrBought: 'bought',
+      potentialSalePrice: 600,
     },
   ])
 }

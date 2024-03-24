@@ -52,6 +52,7 @@ export default function InventoryTable(props: Props) {
         {/* need to make below into fee */}
 
         <td className="px-3 text-white">${item.price + item.shipping}</td>
+        <td className="px-3 text-white">${item.potentialSalePrice}</td>
         <td className="px-3">{item.platform}</td>
       </tr>
     )
@@ -71,6 +72,16 @@ export default function InventoryTable(props: Props) {
               <th className="px-3">Price</th>
               <th className="px-3">Shipping</th>
               <th className="px-3">Price after Fees/Shipping</th>
+              {/* <div className="has-tooltip"> */}
+              <th className="px-3 has-tooltip">
+                Value
+                <div className="text-white rounded-lg tooltip -mt-8 shadow-lg bg-opacity-50 bg-black p-1">
+                  The potential sale price of item
+                </div>
+              </th>
+
+              {/* </div> */}
+
               <th className="px-3">Platform</th>
             </tr>
           </thead>

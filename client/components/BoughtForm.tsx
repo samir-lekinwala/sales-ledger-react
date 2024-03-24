@@ -13,6 +13,7 @@ function BoughtForm() {
     const item = form.get('itembought')?.valueOf() as string
     const price = form.get('howmuch')?.valueOf() as string
     const shipping = form.get('shipping')?.valueOf() as number
+    const potentialSalePrice = form.get('potential-value')?.valueOf() as number
     const soldOrBought = 'bought'
     // const inStock = form.get('inStock')?.valueOf() as number
 
@@ -21,6 +22,7 @@ function BoughtForm() {
       price,
       soldOrBought,
       shipping,
+      potentialSalePrice,
     }
     // await postFormData(completedBoughtForm)
     mutateAddBoughtTransaction.mutate(completedBoughtForm)
@@ -33,6 +35,7 @@ function BoughtForm() {
       price: string
       soldOrBought: string
       shipping: number
+      potentialSalePrice: number
     }) => postFormData(completedBoughtForm),
     onSuccess: () => {
       queryClient.invalidateQueries(['items'])
@@ -65,6 +68,16 @@ function BoughtForm() {
           id="howmuch"
           name="howmuch"
           placeholder="For how much?"
+        ></input>
+        <label className="text-white" htmlFor="potential-value">
+          What's the potential value?
+        </label>
+        <input
+          className="block w-half p-4 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-md focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+          type="number"
+          id="potential-value"
+          name="potential-value"
+          placeholder="Add potential value"
         ></input>
         <label className="text-white" htmlFor="shipping">
           Any shipping cost?

@@ -8,4 +8,5 @@ export interface item {
   platform: string
   soldOrBought: string
   created_at: number
+  potentialSalePrice: number
 }

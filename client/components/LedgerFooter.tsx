@@ -14,6 +14,8 @@ function LedgerFooter(props: Props) {
     profit: 0,
   })
 
+  const [totalValues, setTotalValues] = useState()
+
   const { data } = props
   // console.log('from the ledger', data)
 
@@ -21,6 +23,7 @@ function LedgerFooter(props: Props) {
   useEffect(() => {
     //reruns totalboughtandsold when data changes
     getTotalBoughtAndSold()
+    getTotalValueOfItems()
   }, [data])
 
   function getTotalBoughtAndSold() {
@@ -45,6 +48,16 @@ function LedgerFooter(props: Props) {
     return totals
   }
 
+  function getTotalValueOfItems() {
+    let totalValueOfInventory = 0
+
+    for (let i = 0; i < data.length; i++) {
+      if (data[i].soldOrBought === 'bought') {
+        totalValueOfInventory += data[i].potentialSalePrice
+      }
+    }
+    return totalValueOfInventory
+  }
   //what to add to footer
   //total number of trades
   //Total profit which comes from total bought - total sold - fees/shipping
@@ -63,6 +76,9 @@ function LedgerFooter(props: Props) {
               <th scope="col" className="px-2 py-3">
                 Number of transactions
               </th>
+              <th scope="col" className="px-2 py-3">
+                Total Inventory Value
+              </th>
               <th>Total Sold(Price after fees/shipping)</th>
               <th>Total Bought</th>
               <th>Profit</th>
@@ -78,6 +94,12 @@ function LedgerFooter(props: Props) {
                 className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
               >
                 {data.length}
+              </th>
+              <th
+                scope="row"
+                className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+              >
+                {'$' + getTotalValueOfItems()}
               </th>
               <th
                 scope="row"

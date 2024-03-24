@@ -5,3 +5,11 @@
 body {
   background-color: rgb(31 41 55);
 }
+
+.tooltip {
+  @apply invisible absolute;
+}
+
+.has-tooltip:hover .tooltip {
+  @apply visible z-50;
+}
