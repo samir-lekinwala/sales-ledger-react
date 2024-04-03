@@ -1,8 +1,9 @@
-import React from 'react'
+import React, { useState } from 'react'
 import * as models from '../models/items.tsx'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { deleteItem } from '../apis/fruits'
 import moment from 'moment'
+import { Form } from 'react-router-dom'
 
 interface Props {
   data: models.item[]
@@ -10,6 +11,8 @@ interface Props {
 
 export default function InventoryTable(props: Props) {
   const { data } = props
+
+  const [editValue, setEditValue] = useState(false)
 
   const queryClient = useQueryClient()
 
@@ -19,6 +22,11 @@ export default function InventoryTable(props: Props) {
       queryClient.invalidateQueries(['items'])
     },
   })
+
+  function handleEditValue(e) {
+    setEditValue(true)
+    console.log(editValue)
+  }
 
   function addItemsToTable(item: models.item) {
     // const feeDollarOrPercent = dollarOrPercent(item)
@@ -52,7 +60,19 @@ export default function InventoryTable(props: Props) {
         {/* need to make below into fee */}
 
         <td className="px-3 text-white">${item.price + item.shipping}</td>
-        <td className="px-3 text-white">${item.potentialSalePrice}</td>
+        {editValue === false ? (
+          <td
+            className="px-3 text-white"
+            onDoubleClick={(e) => handleEditValue(e)}
+          >
+            ${item.potentialSalePrice}
+          </td>
+        ) : (
+          <form action="">
+            <input defaultValue={item.potentialSalePrice}></input>
+          </form>
+        )}
+
         <td className="px-3">{item.platform}</td>
       </tr>
     )

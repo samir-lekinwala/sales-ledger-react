@@ -14,6 +14,18 @@ router.get('/', async (req, res) => {
     res.status(500).json({ message: 'Something went wrong' })
   }
 })
+router.patch('/:id', async (req, res) => {
+  try {
+    const id = Number(req.params.id)
+    const data = await req.body
+    // const id = id
+    await db.updateItem(id, data)
+    res.json(200)
+  } catch (error) {
+    console.log(error)
+    res.status(500).json({ message: 'Something went wrong' })
+  }
+})
 
 router.post('/', async (req, res) => {
   try {
