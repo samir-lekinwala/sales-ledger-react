@@ -28,14 +28,6 @@ export default function InventoryTable(props: Props) {
 
   const queryClient = useQueryClient()
 
-  // const mutateEditTransaction = useMutation({
-  //   mutationFn: (id: number, formData: any) => patchFormData(id, formData),
-  //   onSuccess: () => {
-  //     queryClient.invalidateQueries(['items'])
-  //     setEditItemId(null) // Reset editItemId after successful edit
-  //   },
-  // })
-
   const mutateEditTransaction = useMutation({
     mutationFn: (submitForm: { id: number; potentialSalePrice: number }) =>
       patchFormData(submitForm),
@@ -59,14 +51,6 @@ export default function InventoryTable(props: Props) {
   }
 
   function addItemsToTable(item: models.item) {
-    // const feeDollarOrPercent = dollarOrPercent(item)
-    // console.log(feeDollarOrPercent, item.item)
-    // calculateFeesTotal(item)
-    // const fee = (item.price - calculateFeesTotal(item) - item.shipping).toFixed(
-    //   2,
-    // )
-    //insert variable to get the total cost based on a function that checks if item is bought or sold.
-
     return (
       <tr
         key={item.id}
