@@ -4,6 +4,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { deleteItem, patchFormData } from '../apis/fruits'
 import moment from 'moment'
 import { Form } from 'react-router-dom'
+import { Card, Typography } from '@material-tailwind/react'
 
 interface Props {
   data: models.item[]
@@ -105,11 +106,106 @@ export default function InventoryTable(props: Props) {
     )
   }
 
+  const TABLE_HEAD = [
+    'Item',
+    'Date Created',
+    'Price',
+    'Shipping',
+    'Price after Fees/Shipping',
+
+    'Value',
+
+    'Platform',
+  ]
+
+  function TableWithStripedRows(item) {
+    return (
+      // <Card className="h-full w-full overflow-scroll">
+      //   <table className="w-full min-w-max table-auto text-left">
+      //     <thead>
+      //       <tr>
+      //         {TABLE_HEAD.map((head) => (
+      //           <th
+      //             key={head}
+      //             className="border-b border-blue-gray-100 bg-blue-gray-50 p-4"
+      //           >
+      //             <Typography
+      //               variant="small"
+      //               color="blue-gray"
+      //               className="font-normal leading-none opacity-70"
+      //             >
+      //               {head}
+      //             </Typography>
+      //           </th>
+      //         ))}
+      //       </tr>
+      //     </thead>
+      <tbody>
+        {/* //head// */}
+
+        <tr key={item.item} className="even:bg-blue-gray-50/50">
+          <td className="p-4">
+            <Typography
+              variant="small"
+              color="blue-gray"
+              className="font-normal"
+            >
+              {item.item}
+            </Typography>
+          </td>
+          <td className="p-4">
+            <Typography
+              variant="small"
+              color="blue-gray"
+              className="font-normal"
+            >
+              {moment(item.created_at).format('lll')}
+            </Typography>
+          </td>
+          <td className="p-4">
+            <Typography
+              variant="small"
+              color="blue-gray"
+              className="font-normal"
+            >
+              {item.price}
+            </Typography>
+          </td>
+          <td className="p-4">
+            <Typography
+              variant="small"
+              color="blue-gray"
+              className="font-normal"
+            >
+              {item.shipping}
+            </Typography>
+          </td>
+          <td className="p-4">
+            <Typography
+              as="a"
+              href="#"
+              variant="small"
+              color="blue-gray"
+              className="font-medium"
+            >
+              Edit
+            </Typography>
+          </td>
+        </tr>
+      </tbody>
+      //   </table>
+      // </Card>
+    )
+  }
+
   return (
     <div>
-      <h1 className="text-white">Inventory</h1>
-      <div className="max-h-[calc(85vh-100px)] relative overflow-x-auto shadow-md sm:rounded-lg">
-        <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+      {/* <h1 className="text-white">Inventory</h1>
+      <div className="max-h-[calc(85vh-100px)] relative overflow-x-auto shadow-md sm:rounded-lg"> */}
+
+      <Card className="h-full w-full overflow-scroll">
+        <table className="w-full min-w-max table-auto text-left">
+          {/* <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400"> */}
           <thead className="sticky top-0 text-m text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
             <tr>
               <th scope="col" className="px-3 py-3">
@@ -134,11 +230,14 @@ export default function InventoryTable(props: Props) {
           </thead>
           <tbody>
             {data.map((item: models.item) =>
-              item.soldOrBought === 'bought' ? addItemsToTable(item) : null,
+              item.soldOrBought === 'bought'
+                ? TableWithStripedRows(item)
+                : null,
             )}
           </tbody>
         </table>
-      </div>
+      </Card>
     </div>
+    // </div>
   )
 }
