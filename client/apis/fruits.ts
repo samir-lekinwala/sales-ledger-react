@@ -6,8 +6,9 @@ const rootUrl = '/api/v1'
 export async function postFormData(data: models.item) {
   return request.post(rootUrl + '/bought').send(data)
 }
-export async function patchFormData(id: number, data: models.item) {
-  return request.patch(rootUrl + `/bought/${id}`).send(data)
+export async function patchFormData(data: models.item) {
+  console.log('data from fruits', data)
+  return request.patch(rootUrl + `/bought/${data.id}`).send(data)
 }
 export async function getAllItems() {
   return request.get(rootUrl + '/bought')

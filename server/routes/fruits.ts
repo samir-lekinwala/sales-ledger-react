@@ -18,6 +18,7 @@ router.patch('/:id', async (req, res) => {
   try {
     const id = Number(req.params.id)
     const data = await req.body
+    console.log('data console.log', data)
     // const id = id
     await db.updateItem(id, data)
     res.json(200)

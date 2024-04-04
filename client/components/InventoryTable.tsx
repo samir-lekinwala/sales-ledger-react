@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import * as models from '../models/items.tsx'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { deleteItem } from '../apis/fruits'
+import { deleteItem, patchFormData } from '../apis/fruits'
 import moment from 'moment'
 import { Form } from 'react-router-dom'
 
@@ -10,11 +10,42 @@ interface Props {
 }
 
 export default function InventoryTable(props: Props) {
-  const { data } = props
+  const [editItemId, setEditItemId] = useState<number | null>(null)
 
-  const [editValue, setEditValue] = useState(false)
+  function handleSubmit(
+    event: React.FormEvent<HTMLFormElement>,
+    itemId: number,
+  ) {
+    event.preventDefault()
+    const formData = new FormData(event.currentTarget)
+    const potentialValue = formData.get('potentialValue')?.valueOf() as number
+    console.log(potentialValue)
+
+    const submitForm = { id: itemId, potentialSalePrice: potentialValue }
+    console.log(submitForm)
+    mutateEditTransaction.mutate(submitForm)
+  }
 
   const queryClient = useQueryClient()
+
+  // const mutateEditTransaction = useMutation({
+  //   mutationFn: (id: number, formData: any) => patchFormData(id, formData),
+  //   onSuccess: () => {
+  //     queryClient.invalidateQueries(['items'])
+  //     setEditItemId(null) // Reset editItemId after successful edit
+  //   },
+  // })
+
+  const mutateEditTransaction = useMutation({
+    mutationFn: (submitForm: { id: number; potentialSalePrice: number }) =>
+      patchFormData(submitForm),
+    onSuccess: () => {
+      queryClient.invalidateQueries(['items'])
+      setEditItemId(null)
+    },
+  })
+
+  const { data } = props
 
   const mutateDeleteTransaction = useMutation({
     mutationFn: (id: number) => deleteItem(id),
@@ -23,9 +54,8 @@ export default function InventoryTable(props: Props) {
     },
   })
 
-  function handleEditValue(e) {
-    setEditValue(true)
-    console.log(editValue)
+  function handleDoubleClick(id: number) {
+    setEditItemId(id)
   }
 
   function addItemsToTable(item: models.item) {
@@ -60,17 +90,30 @@ export default function InventoryTable(props: Props) {
         {/* need to make below into fee */}
 
         <td className="px-3 text-white">${item.price + item.shipping}</td>
-        {editValue === false ? (
+        {editItemId === item.id ? (
+          <div>
+            <form onSubmit={(e) => handleSubmit(e, item.id)}>
+              <label htmlFor="potentialValue">
+                {' '}
+                <input
+                  id="potentialValue"
+                  name="potentialValue"
+                  className="text-black"
+                  // onDoubleClick={(e) => handleEditValue(e, item)}
+                  defaultValue={item.potentialSalePrice}
+                ></input>
+              </label>
+              <button className="text-white">Submit</button>
+            </form>
+          </div>
+        ) : (
           <td
             className="px-3 text-white"
-            onDoubleClick={(e) => handleEditValue(e)}
+            key={item.id}
+            onDoubleClick={(e) => handleDoubleClick(item.id)}
           >
             ${item.potentialSalePrice}
           </td>
-        ) : (
-          <form action="">
-            <input defaultValue={item.potentialSalePrice}></input>
-          </form>
         )}
 
         <td className="px-3">{item.platform}</td>
