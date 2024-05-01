@@ -4,6 +4,9 @@ import { Outlet } from 'react-router-dom'
 import Footer from './LedgerFooter'
 import { getAllItems } from '../apis/fruits'
 import { useQuery } from '@tanstack/react-query'
+import SpeedDial, { SpeedDialPlacement } from './SpeedDial'
+import { SuccessAlert } from './SuccessAlert'
+import Heading from './Heading'
 
 function Layout() {
   const { data, isLoading, isError, error } = useQuery({
@@ -22,30 +25,12 @@ function Layout() {
 
   return (
     <div>
-      {/* <h1 onClick={handleBurgerMenuClick} className="bg-red-200">
-        Sales Ledger
-      </h1> */}
+      <Heading />
       <div className="burgermenu-container">
-        <BurgerMenu
-          data={data.body}
-          // burgermenuclick={setBurgerMenuClick}
-          // menuStatus={burgerMenuClick}
-        />
-        {/* {burgerMenuClick ? (
-          <>
-            <BurgerMenu burgermenuclick={setBurgerMenuClick} />
-          </>
-        ) : (
-          <span
-            className="burgermenu float-right"
-            onClick={handleBurgerMenuClick}
-          >
-            dsad
-          </span>
-        )} */}
+        <BurgerMenu data={data.body} />
       </div>
       <Outlet />
-      {/* <Footer /> */}
+      <SpeedDialPlacement />
     </div>
   )
 }

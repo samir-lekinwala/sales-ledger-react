@@ -42,9 +42,9 @@ function LedgerFooter(props: Props) {
       soldTotal: soldTotal.toFixed(2),
       profit: (soldTotal - boughtTotal).toFixed(2),
     }
-    // console.log('totals', totals)
+    console.log('totals', totals)
     setBoughtAndSold(totals)
-    // console.log('state', boughtAndSold)
+    console.log('state', boughtAndSold)
     return totals
   }
 
@@ -69,17 +69,37 @@ function LedgerFooter(props: Props) {
   return (
     <div>
       {/* <h1>Footer</h1> */}
-      <div className="sticky bottom-0 overflow-x-auto shadow-md sm:rounded-lg">
-        <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-          <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-            <tr>
-              <th scope="col" className="px-2 py-3">
-                Number of transactions
+      <div className="w-full fixed bottom-0 overflow-x-auto shadow-md sm:rounded-lg">
+        <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+          <thead>
+            <tr className="text-xs bg-[#EEEEEE] text-[#222831] uppercase">
+              <th
+                scope="col"
+                className="px-2 py-3 has-tooltip"
+                data-tooltip-target="total-transactions"
+              >
+                Transactions
+                <div
+                  data-tooltip="total-transactions"
+                  data-tooltip-placement="top"
+                  className="normal-case tooltip absolute z-50 whitespace-normal break-words rounded-lg bg-black py-1.5 px-3 font-sans text-sm font-normal text-white focus:outline-none"
+                >
+                  Total number of transactions made
+                </div>
               </th>
               <th scope="col" className="px-2 py-3">
                 Total Inventory Value
               </th>
-              <th>Total Sold(Price after fees/shipping)</th>
+              <th data-tooltip-target="total-sold" className="has-tooltip">
+                Total Sold
+                <div
+                  data-tooltip="total-sold"
+                  data-tooltip-placement="top"
+                  className="normal-case tooltip absolute z-50 whitespace-normal break-words rounded-lg bg-black py-1.5 px-3 font-sans text-sm font-normal text-white focus:outline-none"
+                >
+                  Price after fees/shipping
+                </div>
+              </th>
               <th>Total Bought</th>
               <th>Profit</th>
               {/* <th>Platform</th>
@@ -88,36 +108,36 @@ function LedgerFooter(props: Props) {
           </thead>
           <tbody>
             {/* {data.map((item) => ( */}
-            <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+            <tr className="bg-[#31363F] border-t dark:bg-gray-800 dark:border-gray-700">
               <th
                 scope="row"
-                className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                className="px-6 py-4 font-medium text-white whitespace-nowrap dark:text-white"
               >
                 {data.length}
               </th>
               <th
                 scope="row"
-                className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                className="px-3 py-4 font-medium text-white whitespace-nowrap dark:text-white"
               >
                 {'$' + getTotalValueOfItems()}
               </th>
               <th
                 scope="row"
-                className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                className="py-4 font-medium text-white whitespace-nowrap dark:text-white"
               >
-                {boughtAndSold?.soldTotal}
+                {`$${boughtAndSold?.soldTotal}`}
               </th>
               <th
                 scope="row"
-                className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                className="py-4 font-medium text-white whitespace-nowrap dark:text-white"
               >
-                {boughtAndSold?.boughtTotal}
+                {`$${boughtAndSold?.boughtTotal}`}
               </th>
               <th
                 scope="row"
-                className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                className="py-4 font-medium text-white whitespace-nowrap dark:text-white"
               >
-                {boughtAndSold?.profit}
+                {`$${boughtAndSold?.profit}`}
               </th>
               {/* <td>{item.created_at}</td>
                 <td>{item.price}</td>

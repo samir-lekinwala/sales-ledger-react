@@ -3,9 +3,20 @@
 @tailwind utilities;
 
 body {
-  background-color: rgb(31 41 55);
+  background-color: #222831;
 }
 
+table {
+  border-radius: 1rem;
+}
+
+/* table th button {
+  color: red;
+} */
+
+/* button {
+  background-color: red;
+} */
 .tooltip {
   @apply invisible absolute;
 }

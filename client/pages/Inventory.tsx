@@ -15,7 +15,7 @@ function Inventory() {
 
   return (
     <>
-      <BuyorSell />
+      {/* <BuyorSell /> */}
       <InventoryTable data={data.body} />
       <LedgerFooter data={data.body} />
     </>

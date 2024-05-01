@@ -1,3 +1,4 @@
+import { toast } from 'react-toastify'
 import * as models from '../models/items'
 
 export function calculateFeesTotal(item: models.item) {
@@ -40,4 +41,8 @@ export function calculateIfItemSold(item: models.item) {
 
   const afterFeesAndShipping = item.price - item.shipping - fee
   return afterFeesAndShipping
+}
+
+export function notify(type: string, text: string) {
+  return toast[type](text)
 }

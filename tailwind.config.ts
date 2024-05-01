@@ -18,10 +18,10 @@
 //   plugins: [],
 // })
 
-// import { Config } from 'tailwindcss'
+import type { Config } from 'tailwindcss'
 import withMT from '@material-tailwind/react/utils/withMT'
 
-const config = {
+const config: Config = {
   content: [
     './client/components/**/*.{js,ts,jsx,tsx,mdx}',
     './src/pages/**/*.{js,ts,jsx,tsx,mdx}',

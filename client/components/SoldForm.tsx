@@ -1,8 +1,9 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import React, { useState } from 'react'
 import { postFormData } from '../apis/fruits'
-import { text } from 'express'
 import { Link } from 'react-router-dom'
+import { ToastContainer } from 'react-toastify'
+import { notify } from '../functions/functions'
 
 interface CompletedSoldForm {
   item: string
@@ -77,6 +78,7 @@ function SoldForm() {
     const fees = form.get('custom-fee')?.valueOf() as number
     const soldOrBought = 'sold'
     const fee = feeCalculation(platform, Number(price)) as number
+    notify('success', `${item} successfully added to your ledger`)
     // const inStock = form.get('inStock')?.valueOf() as number
 
     //need to take what the custom fee percentages are or dollars are from input and have a function
@@ -211,6 +213,7 @@ function SoldForm() {
 
   return (
     <div>
+      <ToastContainer />
       <form onSubmit={(e) => handleSubmit(e)}>
         <label className="text-white" htmlFor="itemsold">
           Item sold

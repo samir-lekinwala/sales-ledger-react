@@ -3,11 +3,16 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { postFormData } from '../apis/fruits'
 import { Link } from 'react-router-dom'
+import { SuccessAlert } from './SuccessAlert'
+import { useState } from 'react'
+import { notify } from '../functions/functions'
+
+import { ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
 function BoughtForm() {
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
-
     const target = event.currentTarget
     const form = new FormData(target)
     const item = form.get('itembought')?.valueOf() as string
@@ -15,6 +20,7 @@ function BoughtForm() {
     const shipping = form.get('shipping')?.valueOf() as number
     const potentialSalePrice = form.get('potential-value')?.valueOf() as number
     const soldOrBought = 'bought'
+    notify('success', `${item} has been successfully added`)
     // const inStock = form.get('inStock')?.valueOf() as number
 
     const completedBoughtForm = {
@@ -42,12 +48,9 @@ function BoughtForm() {
     },
   })
 
-  // function handleButtonClick(e) {
-  //   e.preventDefault()
-  // }
-
   return (
     <div>
+      <ToastContainer position="top-center" />
       <form onSubmit={(e) => handleSubmit(e)}>
         <label className="text-white" htmlFor="itembought">
           Item bought
@@ -58,6 +61,7 @@ function BoughtForm() {
           id="itembought"
           name="itembought"
           placeholder="What have you bought?"
+          required
         ></input>
         <label className="text-white" htmlFor="howmuch">
           For how much?
@@ -68,6 +72,7 @@ function BoughtForm() {
           id="howmuch"
           name="howmuch"
           placeholder="For how much?"
+          required
         ></input>
         <label className="text-white" htmlFor="potential-value">
           What's the potential value?
@@ -78,6 +83,7 @@ function BoughtForm() {
           id="potential-value"
           name="potential-value"
           placeholder="Add potential value"
+          required
         ></input>
         <label className="text-white" htmlFor="shipping">
           Any shipping cost?
@@ -88,9 +94,13 @@ function BoughtForm() {
           id="shipping"
           name="shipping"
           step={0.01}
+          defaultValue={0}
           placeholder="Any shipping cost?"
         ></input>
-        <button className="group-hover:opacity-100 ml-1 mt-5 text-red-700 hover:text-white border border-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:hover:bg-red-600 dark:focus:ring-red-900">
+        <button
+          // onClick={notify}
+          className="group-hover:opacity-100 ml-1 mt-5 text-red-700 hover:text-white border border-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:hover:bg-red-600 dark:focus:ring-red-900"
+        >
           Submit
         </button>
       </form>
