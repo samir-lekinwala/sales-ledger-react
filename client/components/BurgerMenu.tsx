@@ -197,7 +197,7 @@ export function BurgerMenu(props: Props) {
         colors: {
           transparent: 'transparent',
           black: '#000',
-          white: '#fff',
+          white: '#EEE',
           gray: {
             100: '#f7fafc',
             // ...
@@ -233,9 +233,9 @@ export function BurgerMenu(props: Props) {
           >
             <div className="mb-2 flex items-center gap-4 p-4">
               <img
-                src="https://docs.material-tailwind.com/img/logo-ct-dark.png"
-                alt="brand"
-                className="h-8 w-8"
+                src="client/images/minimal-book-v2-black.png"
+                alt="Sales Ledger Logo"
+                className="h-8"
               />
               <Typography variant="h5" color="black">
                 Sales Ledger

@@ -1,7 +1,14 @@
 import BuyorSell from './BuyorSell'
+import HorizontalCard from './HorizontalCard'
+import Jumbotron from './Jumbotron'
 
 function Home() {
-  return <BuyorSell />
+  return (
+    <>
+      <Jumbotron />
+      <HorizontalCard />
+    </>
+  )
 }
 
 export default Home
