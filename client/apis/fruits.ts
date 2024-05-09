@@ -13,6 +13,9 @@ export async function patchFormData(data: models.item) {
 export async function getAllItems() {
   return request.get(rootUrl + '/bought')
 }
+export async function getItem(id: number) {
+  return request.get(rootUrl + `/bought/edit/${id}`)
+}
 export async function deleteItem(id: number) {
   return request.delete(rootUrl + `/delete/${id}`)
 }

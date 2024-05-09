@@ -11,10 +11,12 @@ function Heading() {
         {/* </div> */}
         <header className="text-white w-full text-2xl absolute text-center top-2">
           <Link to="/">
-            <div className="inline-block relative top-1 mr-2 outline-white">
+            <div className="inline-block relative bottom-3 mr-2 outline-white">
               <Logo />
             </div>
-            Sales Ledger
+            <h1 className="inline-block relative bottom-3 mr-2 outline-white text-5xl font-poppins">
+              Sales Ledger
+            </h1>
           </Link>
         </header>
       </div>

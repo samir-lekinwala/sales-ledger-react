@@ -209,7 +209,11 @@ export function BurgerMenu(props: Props) {
                 alt="Sales Ledger Logo"
                 className="h-8"
               />
-              <Typography variant="h5" color="black">
+              <Typography
+                variant="h5"
+                color="black"
+                className="font-poppins text-4xl"
+              >
                 Sales Ledger
               </Typography>
             </div>

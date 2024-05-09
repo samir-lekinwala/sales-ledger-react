@@ -10,6 +10,7 @@ import Bought from './pages/Bought'
 import Inventory from './pages/Inventory'
 import TheLedger from './pages/TheLedger'
 import Sold from './pages/Sold'
+import Edit from './pages/Edit'
 
 // export default createRoutesFromElements(
 //   <Router>
@@ -31,6 +32,7 @@ export const routes = createRoutesFromElements(
     <Route path="bought" element={<Bought />} />
     <Route path="sold" element={<Sold />} />
     <Route path="inventory" element={<Inventory />} />
+    <Route path="edit/:id" element={<Edit />} />
     <Route path="theledger" element={<TheLedger />} />
   </Route>,
 )

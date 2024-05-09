@@ -245,31 +245,227 @@ import { set } from 'firebase/database'
 // console.log(nums)
 // let nums = [2, 2, 1, 1, 1, 2, 2]
 // let nums = [3, 3, 4]
-let nums = [3, 2, 3]
+// let nums = [3, 2, 3]
 
-var majorityElement = function (nums) {
-  const countObj = {}
+// var majorityElement = function (nums) {
+//   const countObj = {}
 
-  nums.forEach((number) => {
-    countObj[number] = ++countObj[number] || 1
-  })
-  console.log(countObj)
+//   nums.forEach((number) => {
+//     countObj[number] = ++countObj[number] || 1
+//   })
+//   // console.log(countObj)
 
-  let result = 0
+//   let result = 0
+//   let count = 0
 
-  for (const key in countObj) {
-    const starter = countObj[key]
-    if (countObj[key] > starter) {
-      result = key
-    } else result = starter
-  }
+//   for (const key in countObj) {
+//     // const starter = countObj[key]
+//     // console.log(countObj[key])
+//     if (countObj[key] > count) {
+//       count = countObj[key]
+//       result = key
+//     }
+//   }
 
-  return result
-}
+//   return result
+// }
 
 // const val = Object.keys(countObj)
 // console.log(countObj)
 
 // console.log(Math.max(...Object.values(countObj)))
 
-console.log(majorityElement(nums))
+// console.log(majorityElement(nums))
+// const nums = [1, 2, 3, 4, 5, 6, 7],
+//   k = 3
+
+// var rotate = function (nums, k) {
+//   const rotatedNumbersForward = nums.slice(nums.length - k, nums.length)
+//   const rotatedNumbersEnd = nums.slice(0, nums.length - k)
+//   nums = []
+//   console.log(nums)
+//   nums = [...rotatedNumbersForward, ...rotatedNumbersEnd]
+//   console.log(nums)
+// }
+
+// console.log(rotate(nums, k))
+// console.log(nums)
+
+// var maxProfit = function (prices) {
+//   let profit = 0
+
+//   for (let i = 0; i < prices.length; i++) {
+//     if (prices[i + 1] > prices[i]) {
+//       profit += prices[i + 1] - prices[i]
+//     }
+//   }
+
+//   return profit
+// }
+
+// console.log(maxProfit([7, 1, 5, 3, 6, 4]))
+
+// function rotate(nums, k) {
+//   (k %= nums.length)
+//   nums.unshift(...nums.splice(nums.length - k))
+
+//   console.log(nums)
+// }
+// let count = 0
+
+// while (count < k) {
+//   let spliced = nums.splice(nums.length - 1, 1)
+//   nums.splice(0, 0, ...spliced)
+//   count++
+//   console.log(nums)
+// }
+// for (let i = 0; i < k; i++) {
+//   // nums.unshift(nums.pop())
+
+//   let spliced = nums.splice(nums.length - 1, 1)
+//   nums.splice(0, 0, ...spliced)
+// }
+// }
+// }
+
+// const nums = [1, 2, 3, 4, 5, 6, 7],
+//   k = 2
+
+// console.log(rotate([-1, -100, 3, 99], 2))
+// console.log(rotate([1, 2, 3, 4, 5, 6, 7], 4))
+// console.log(rotate([1, 2], 4))
+
+// var canJump = function (nums) {
+//   const lastIndex = nums.length - 1
+//   let jumpCount = 0
+//   let currentIndex = nums[0]
+
+//   for (let i = 0; i < nums.length; i++) {
+//     if(nums[i] == 0)
+//   }
+//   return jumpCount >= lastIndex
+// }
+
+// console.log(canJump([2, 3, 1, 1, 4]))
+// // console.log(canJump([2, 3, 1, 1, 4]))
+// console.log(canJump([0]))
+// console.log(canJump([2, 0, 0]))
+// console.log(canJump([2, 5, 0, 0]))
+
+// var isPalindrome = function (s) {
+//   const toJointString = s
+//     .toLowerCase()
+//     .split('')
+//     .filter((letter) => /[a-z0-9]/.test(letter))
+//     .join('')
+
+//   return toJointString == toJointString.split('').reverse().join('')
+// }
+
+// // console.log(isPalindrome('A man, a plan, a canal: Panama'))
+// console.log(isPalindrome('race a car'))
+
+// var isSubsequence = function (s, t) {
+//   let string1Counter = 0
+//   let string2Counter = 0
+
+//   for (let i = 0; i < t.length; i++) {
+//     if (s[string1Counter] == t[string2Counter]) {
+//       string1Counter++
+//       string2Counter++
+//     } else string2Counter++
+//     // if (s[string1Counter] != t[string2Counter]) {
+//     //   string2Counter++
+//     // }
+//   }
+
+//   return string1Counter == s.length
+//   // const sSplit = s.split('')
+//   // const tSplit = t.split('')
+//   // let order = []
+
+//   // for (let i = 0; i < sSplit.length; i++) {
+//   //   let firstIndex = tSplit.indexOf(sSplit[i])
+//   //   order.push(firstIndex)
+//   //   if (firstIndex < 0) {
+//   //     return false
+//   //   }
+//   // }
+//   // const unsorted = order.join('')
+//   // const sorted = order.sort((a, b) => a - b).join('')
+
+//   // if (sorted == unsorted) {
+//   //   return true
+//   // } else return false
+// }
+
+// console.log(isSubsequence('abc', 'ahbgdc'))
+// console.log(isSubsequence('acb', 'ahbgdc'))
+// console.log(isSubsequence('axc', 'ahbgdc'))
+// console.log(isSubsequence('', 'ahbgdc'))
+
+// var canConstruct = function (ransomNote, magazine) {
+//   let note = ransomNote
+
+//   for (const letter in magazine) {
+//     console.log(letter)
+//     note = note.replace(letter, '')
+//     // console.log(note)
+//   }
+//   if (note != '') {
+//     return false
+//   } else return true
+//   // let count = 0
+//   // let countObj = {}
+//   // let countObj2 = {}
+
+//   // ransomNote.split('').forEach((element) => {
+//   //   countObj[element] = ++countObj[element] || 1
+//   // })
+//   // magazine.split('').forEach((element) => {
+//   //   countObj2[element] = ++countObj2[element] || 1
+//   // })
+//   // for (const key in countObj) {
+//   //   if (countObj[key] <= countObj2[key]) {
+//   //     count += countObj[key]
+//   //   }
+//   // }
+//   // return count == ransomNote.length
+// }
+
+// console.log(canConstruct('a', 'b'))
+// console.log(canConstruct('aa', 'ab'))
+// console.log(canConstruct('baa', 'aab'))
+
+var isIsomorphic = function (s, t) {
+  let countObj1 = {}
+  let countObj2 = {}
+
+  let countArray = []
+  let countArray2 = []
+
+  for (let i = 0; i < s.length; i++) {
+    if (s[i + 1] == s[i] || s[i - 1] == s[i]) {
+      countArray.push(2)
+    } else countArray.push(1)
+  }
+  for (let i = 0; i < s.length; i++) {
+    if (t[i + 1] == t[i] || t[i - 1] == t[i]) {
+      countArray2.push(2)
+    } else countArray2.push(1)
+  }
+  return countArray.join('') == countArray2.join('')
+  // s.split('').forEach((element) => {
+  //   countObj1[element] = ++countObj1[element] || 1
+  // })
+  // t.split('').forEach((element) => {
+  //   countObj2[element] = ++countObj2[element] || 1
+  // })
+
+  // return Object.values(countObj1).join('') == Object.values(countObj2).join('')
+}
+
+console.log(isIsomorphic('egg', 'add'))
+console.log(isIsomorphic('foo', 'bar'))
+console.log(isIsomorphic('paper', 'title'))
+console.log(isIsomorphic('bbbaaaba', 'aaabbbba'))

@@ -3,8 +3,7 @@ import * as models from '../models/items.tsx'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { deleteItem, patchFormData } from '../apis/fruits'
 import moment from 'moment'
-import { Form } from 'react-router-dom'
-import { Card, Typography } from '@material-tailwind/react'
+import { Link } from 'react-router-dom'
 
 interface Props {
   data: models.item[]
@@ -62,10 +61,12 @@ export default function InventoryTable(props: Props) {
           scope="row"
           className="font-medium text-[#EEEEEE] text-left relative left-2"
         >
-          {item.item}
+          <Link className="hover:font-bold" to={`/edit/${item.id}`}>
+            {item.item}
+          </Link>
           <button
             onClick={() => mutateDeleteTransaction.mutate(item.id)}
-            className="opacity-0 group-hover:opacity-100 ml-5 text-red-700 hover:text-white border border-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-2 py-1 text-center me-2 mb-2 dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:hover:bg-red-600 dark:focus:ring-red-900"
+            className="opacity-0 group-hover:opacity-100 mt-2 ml-3 inline-block text-red-700 hover:text-white border border-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-2 py-1 text-center me-2 mb-2 dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:hover:bg-red-600 dark:focus:ring-red-900"
           >
             X
           </button>
@@ -85,7 +86,6 @@ export default function InventoryTable(props: Props) {
                   id="potentialValue"
                   name="potentialValue"
                   className="text-black w-20"
-                  // onDoubleClick={(e) => handleEditValue(e, item)}
                   defaultValue={item.potentialSalePrice}
                 ></input>
               </label>
@@ -95,11 +95,7 @@ export default function InventoryTable(props: Props) {
             </form>
           </div>
         ) : (
-          <td
-            // className="ml-4"
-            key={item.id}
-            onDoubleClick={(e) => handleDoubleClick(item.id)}
-          >
+          <td key={item.id} onDoubleClick={(e) => handleDoubleClick(item.id)}>
             ${item.potentialSalePrice}
           </td>
         )}
@@ -119,106 +115,9 @@ export default function InventoryTable(props: Props) {
     'Platform',
   ]
 
-  const TABLE_HEAD = [
-    'Item',
-    'Date Created',
-    'Price',
-    'Shipping',
-    'Price after Fees/Shipping',
-
-    'Value',
-
-    'Platform',
-  ]
-
-  function TableWithStripedRows(item) {
-    return (
-      // <Card className="h-full w-full overflow-scroll">
-      //   <table className="w-full min-w-max table-auto text-left">
-      //     <thead>
-      //       <tr>
-      //         {TABLE_HEAD.map((head) => (
-      //           <th
-      //             key={head}
-      //             className="border-b border-blue-gray-100 bg-blue-gray-50 p-4"
-      //           >
-      //             <Typography
-      //               variant="small"
-      //               color="blue-gray"
-      //               className="font-normal leading-none opacity-70"
-      //             >
-      //               {head}
-      //             </Typography>
-      //           </th>
-      //         ))}
-      //       </tr>
-      //     </thead>
-      <tbody>
-        {/* //head// */}
-
-        <tr key={item.item} className="even:bg-blue-gray-50/50">
-          <td className="p-4">
-            <Typography
-              variant="small"
-              color="blue-gray"
-              className="font-normal"
-            >
-              {item.item}
-            </Typography>
-          </td>
-          <td className="p-4">
-            <Typography
-              variant="small"
-              color="blue-gray"
-              className="font-normal"
-            >
-              {moment(item.created_at).format('lll')}
-            </Typography>
-          </td>
-          <td className="p-4">
-            <Typography
-              variant="small"
-              color="blue-gray"
-              className="font-normal"
-            >
-              {item.price}
-            </Typography>
-          </td>
-          <td className="p-4">
-            <Typography
-              variant="small"
-              color="blue-gray"
-              className="font-normal"
-            >
-              {item.shipping}
-            </Typography>
-          </td>
-          <td className="p-4">
-            <Typography
-              as="a"
-              href="#"
-              variant="small"
-              color="blue-gray"
-              className="font-medium"
-            >
-              Edit
-            </Typography>
-          </td>
-        </tr>
-      </tbody>
-      //   </table>
-      // </Card>
-    )
-  }
-
   return (
     <div className="max-h-[calc(85vh-100px)] relative overflow-x-auto shadow-md sm:rounded-lg">
-      {/* <h1 className="text-white">Inventory</h1>
-      <div className="max-h-[calc(85vh-100px)] relative overflow-x-auto shadow-md sm:rounded-lg"> */}
-
-      {/* <Card color="gray" className="h-full w-full overflow-scroll"> */}
       <table className="w-full table-auto text-left">
-        {/* <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400"> */}
         <thead className="sticky top-0 text-xs uppercase bg-[#EEEEEE] text-[#222831]">
           <tr className="h-2.5">
             {tableHeaders.map((header) => (
@@ -226,39 +125,14 @@ export default function InventoryTable(props: Props) {
                 {header}
               </th>
             ))}
-
-            {/* 
-            <th scope="col" className="px-3 py-3">
-              Item
-            </th>
-            <th className="px-3">Date Created</th>
-            <th className="px-3">Price</th>
-            <th className="px-3">Shipping</th>
-            <th className="px-3">Price after Fees/Shipping</th>
-            {/* <div className="has-tooltip"> */}
-            {/* <th className="px-3 has-tooltip">
-              Value
-              <div className="text-white rounded-lg tooltip -mt-8 shadow-lg bg-opacity-50 bg-black p-1">
-                The potential sale price of item
-              </div>
-            </th> */}
-
-            {/* </div> */}
-
-            {/* <th className="px-3">Platform</th> */}
           </tr>
         </thead>
         <tbody>
           {data.map((item: models.item) =>
-            item.soldOrBought === 'bought'
-              ? addItemsToTable(item)
-              : // TableWithStripedRows(item)
-                null,
+            item.soldOrBought === 'bought' ? addItemsToTable(item) : null,
           )}
         </tbody>
       </table>
-      {/* </Card> */}
     </div>
-    // </div>
   )
 }

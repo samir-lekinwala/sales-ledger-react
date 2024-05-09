@@ -4,6 +4,9 @@ import db from './connection.ts'
 export async function getAllItems() {
   return db('items').select()
 }
+export async function getItem(id: number) {
+  return db('items').where('id', id).select()
+}
 export async function addItem(data) {
   return db('items').insert(data)
 }

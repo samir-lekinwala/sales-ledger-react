@@ -20,7 +20,7 @@ export function SpeedDialPlacement() {
   return (
     <div>
       <div className="absolute top-0 right-0">
-        <SpeedDial placement="bottom">
+        <SpeedDial placement="top">
           <SpeedDialHandler>
             <IconButton size="lg" className="rounded-full">
               <PlusIcon className="h-5 w-5 transition-transform group-hover:rotate-45" />
@@ -44,7 +44,10 @@ export function SpeedDialPlacement() {
                   />
                 </svg>
 
-                <div color="blue-gray" className="text-xs font-bold">
+                <div
+                  color="blue-gray"
+                  className="text-xs font-poppins underline relative bottom-1"
+                >
                   Bought
                 </div>
               </SpeedDialAction>
@@ -67,7 +70,9 @@ export function SpeedDialPlacement() {
                 </svg>
 
                 {/* <CogIcon className="h-5 w-5" /> */}
-                <div className=" text-center text-xs font-bold">Sold</div>
+                <div className=" text-center text-xs font-poppins underline relative bottom-1">
+                  Sold
+                </div>
               </SpeedDialAction>
             </Link>
             <SpeedDialAction>

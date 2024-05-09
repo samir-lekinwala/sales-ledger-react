@@ -14,6 +14,17 @@ router.get('/', async (req, res) => {
     res.status(500).json({ message: 'Something went wrong' })
   }
 })
+router.get('/edit/:id', async (req, res) => {
+  try {
+    const id = Number(req.params.id)
+    const fruits = await db.getItem(id)
+
+    res.json(fruits)
+  } catch (error) {
+    console.log(error)
+    res.status(500).json({ message: 'Something went wrong' })
+  }
+})
 router.patch('/:id', async (req, res) => {
   try {
     const id = Number(req.params.id)

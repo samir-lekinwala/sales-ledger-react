@@ -23,22 +23,21 @@ import withMT from '@material-tailwind/react/utils/withMT'
 
 const config = {
   content: [
-    './client/components/**/*.{js,ts,jsx,tsx,mdx}',
-    './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
-    './src/components/**/*.{js,ts,jsx,tsx,mdx}',
-    './src/app/**/*.{js,ts,jsx,tsx,mdx}',
+    './index.html',
+    './client/**/*.{js,ts,jsx,tsx}',
+    // './client/components/**/*.{js,ts,jsx,tsx,mdx}',
+    // './client/pages/**/*.{js,ts,jsx,tsx,mdx}',
+    // // './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
+    // './src/components/**/*.{js,ts,jsx,tsx,mdx}',
+    // // './src/app/**/*.{js,ts,jsx,tsx,mdx}',
   ],
   theme: {
     extend: {
       fontFamily: {
-        mono: ['ui-monospace'],
+        'jersey-25': ['"Jersey 25"', 'sans-serif'],
+        poppins: ['Poppins', 'sans-serif'],
+        // custom1: ['custom'],
         // sans: ['var(--font-manrope)'],
-      },
-      fontWeight: {
-        regular: '400',
-        medium: '500',
-        'semi-bold': '600',
-        bold: '700',
       },
       // colors: {
       //   // Absolute Colors
