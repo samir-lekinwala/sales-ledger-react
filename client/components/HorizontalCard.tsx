@@ -1,4 +1,4 @@
-import React from 'react'
+// import React from 'react'
 
 import {
   Card,
@@ -18,7 +18,7 @@ export function HorizontalCard() {
       >
         <img
           src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1471&q=80"
-          alt="card-image"
+          alt="card"
           className="h-full w-full object-cover"
         />
       </CardHeader>
@@ -35,7 +35,7 @@ export function HorizontalCard() {
           selling licenses. Yet its own business model disruption is only part
           of the story
         </Typography>
-        <a href="#" className="inline-block">
+        <a href="google" className="inline-block">
           <Button variant="text" className="flex items-center gap-2">
             Learn More
             <svg

@@ -32,10 +32,14 @@ const config = {
     // // './src/app/**/*.{js,ts,jsx,tsx,mdx}',
   ],
   theme: {
+    screens: {
+      mobile: '360px',
+    },
     extend: {
       fontFamily: {
         'jersey-25': ['"Jersey 25"', 'sans-serif'],
         poppins: ['Poppins', 'sans-serif'],
+        inter: ['Inter', 'sans-serif'],
         // custom1: ['custom'],
         // sans: ['var(--font-manrope)'],
       },

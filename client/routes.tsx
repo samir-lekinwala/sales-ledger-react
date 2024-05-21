@@ -32,7 +32,7 @@ export const routes = createRoutesFromElements(
     <Route path="bought" element={<Bought />} />
     <Route path="sold" element={<Sold />} />
     <Route path="inventory" element={<Inventory />} />
-    <Route path="edit/:id" element={<Edit />} />
+    <Route path="/edit/:boughtOrSold/:id" element={<Edit />} />
     <Route path="theledger" element={<TheLedger />} />
   </Route>,
 )

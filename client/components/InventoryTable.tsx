@@ -4,12 +4,16 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { deleteItem, patchFormData } from '../apis/fruits'
 import moment from 'moment'
 import { Link } from 'react-router-dom'
+import { Card, List, ListItem } from '@material-tailwind/react'
+import { useOutsideClick } from '../hooks/useOutsideClick.ts'
 
 interface Props {
   data: models.item[]
 }
 
 export default function InventoryTable(props: Props) {
+  const [itemOptions, setItemOptions] = useState<number | null>()
+  const [optionsVisible, setOptionsVisible] = useState<boolean | null>()
   const [editItemId, setEditItemId] = useState<number | null>(null)
 
   function handleSubmit(
@@ -51,25 +55,73 @@ export default function InventoryTable(props: Props) {
     console.log('item id set')
   }
 
+  function handleItemOptions(itemId: number) {
+    if (itemId == itemOptions) {
+      setItemOptions(null)
+      setOptionsVisible(false)
+    } else setItemOptions(itemId)
+    setOptionsVisible(true)
+  }
+
+  const ref = useOutsideClick(() => {
+    setOptionsVisible(false)
+  })
+
+  // even:bg-[#484f5c]
+
   function addItemsToTable(item: models.item) {
     return (
       <tr
         key={item.id}
-        className="text-xs group text-white border-b bg-[#31363F] dark:bg-gray-800 dark:border-gray-700"
+        className="even:bg-[#222831] group/item font-inter text-xs group text-white border-b bg-[#31363F] dark:bg-gray-800 dark:border-gray-700"
       >
         <th
           scope="row"
           className="font-medium text-[#EEEEEE] text-left relative left-2"
+          onClick={() => handleItemOptions(item.id)}
         >
-          <Link className="hover:font-bold" to={`/edit/${item.id}`}>
+          <div>{item.item}</div>
+
+          {/* <Link className="" to={`/edit/${item.soldOrBought}/${item.id}`}>
             {item.item}
-          </Link>
-          <button
-            onClick={() => mutateDeleteTransaction.mutate(item.id)}
-            className="opacity-0 group-hover:opacity-100 mt-2 ml-3 inline-block text-red-700 hover:text-white border border-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-2 py-1 text-center me-2 mb-2 dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:hover:bg-red-600 dark:focus:ring-red-900"
-          >
-            X
-          </button>
+          </Link> */}
+
+          {/* <div className="w-fit opacity-0 group-hover/item:opacity-100 hover flex flex-col gap-4"> */}
+          {item.id == itemOptions && optionsVisible ? (
+            <Card ref={ref} className="w-20 absolute z-20">
+              <List>
+                <ListItem
+                  className="w-16"
+                  // size=""
+                  // className="text-blue-700"
+                  // className="mt-2 ml-3 inline-block text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-2 py-1 text-center me-2 mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-600 dark:focus:ring-blue-900"
+                >
+                  <Link to={`/edit/${item.soldOrBought}/${item.id}`}>Edit</Link>
+
+                  {/* Edit */}
+                </ListItem>
+                <ListItem
+                  className="w-16 text-blue-700 hover:text-white hover:bg-blue-700"
+                  // size=""
+                  // className="text-blue-700"
+                  // className="mt-2 ml-3 inline-block text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-2 py-1 text-center me-2 mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-600 dark:focus:ring-blue-900"
+                >
+                  <Link to={`/edit/sold/${item.id}`}>Sold</Link>
+
+                  {/* Edit */}
+                </ListItem>
+                <ListItem
+                  className="w-16 flex justify-center text-[#ff2525] hover:text-[#fff] hover:bg-[#ff0000]"
+                  onClick={() => mutateDeleteTransaction.mutate(item.id)}
+                  // className="text-red-700 my-2"
+                  // className="mt-2 ml-3 inline-block text-red-700 hover:text-white border border-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-2 py-1 text-center me-2 mb-2 dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:hover:bg-red-600 dark:focus:ring-red-900"
+                >
+                  Delete
+                </ListItem>
+              </List>
+            </Card>
+          ) : null}
+          {/* </div> */}
         </th>
         <td className="px-3">{moment(item.created_at).format('lll')}</td>
         <td className="px-3">${item.price}</td>
@@ -95,7 +147,7 @@ export default function InventoryTable(props: Props) {
             </form>
           </div>
         ) : (
-          <td key={item.id} onDoubleClick={(e) => handleDoubleClick(item.id)}>
+          <td key={item.id} onDoubleClick={() => handleDoubleClick(item.id)}>
             ${item.potentialSalePrice}
           </td>
         )}
@@ -107,18 +159,20 @@ export default function InventoryTable(props: Props) {
 
   const tableHeaders = [
     'Item',
-    'Date Created',
+    'Date',
     'Price',
     'Shipping',
-    'Price after Fees/Shipping',
+    'Net price',
+    // 'Price after Fees/Shipping',
     'Value',
     'Platform',
   ]
+  // max-h-[calc(90vh-93px)]
 
   return (
-    <div className="max-h-[calc(85vh-100px)] relative overflow-x-auto shadow-md sm:rounded-lg">
+    <div className="max-h-[calc(100vh-150px)] overflow-x-auto shadow-md rounded-lg">
       <table className="w-full table-auto text-left">
-        <thead className="sticky top-0 text-xs uppercase bg-[#EEEEEE] text-[#222831]">
+        <thead className="z-20 sticky top-0 text-xs uppercase bg-[#EEEEEE] text-[#222831]">
           <tr className="h-2.5">
             {tableHeaders.map((header) => (
               <th key={header} className="px-1">

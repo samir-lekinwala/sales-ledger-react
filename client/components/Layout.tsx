@@ -1,11 +1,9 @@
-import React, { useState } from 'react'
 import BurgerMenu from './BurgerMenu'
 import { Outlet } from 'react-router-dom'
-import Footer from './LedgerFooter'
 import { getAllItems } from '../apis/fruits'
 import { useQuery } from '@tanstack/react-query'
-import SpeedDial, { SpeedDialPlacement } from './SpeedDial'
-import { SuccessAlert } from './SuccessAlert'
+import { SpeedDialPlacement } from './SpeedDial'
+
 import Heading from './Heading'
 
 function Layout() {
@@ -26,9 +24,7 @@ function Layout() {
   return (
     <div>
       <Heading />
-      <div className="burgermenu-container">
-        <BurgerMenu data={data.body} />
-      </div>
+      <BurgerMenu data={data.body} />
       <Outlet />
       <SpeedDialPlacement />
     </div>

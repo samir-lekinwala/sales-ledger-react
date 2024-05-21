@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import * as models from '../models/items'
-import { useQuery, useQueryClient, useMutation } from '@tanstack/react-query'
-import { dollarOrPercent, calculateFeesTotal } from '../functions/functions.tsx'
+
+import { calculateFeesTotal } from '../functions/functions.tsx'
 
 interface Props {
   data: models.item[]
@@ -14,7 +14,7 @@ function LedgerFooter(props: Props) {
     profit: 0,
   })
 
-  const [totalValues, setTotalValues] = useState()
+  // const [totalValues, setTotalValues] = useState()
 
   const { data } = props
   // console.log('from the ledger', data)
@@ -69,16 +69,16 @@ function LedgerFooter(props: Props) {
   return (
     <div>
       {/* <h1>Footer</h1> */}
-      <div className="w-full fixed bottom-0 overflow-x-auto shadow-md sm:rounded-lg">
-        <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+      <div className=" max-h-min w-full fixed bottom-0 overflow-x-auto shadow-md rounded-lg">
+        <table className="w-full text-xs text-left text-gray-500 dark:text-gray-400">
           <thead>
-            <tr className="text-xs bg-[#EEEEEE] text-[#222831] uppercase">
+            <tr className="text-[12px] bg-[#EEEEEE] text-[#222831] uppercase">
               <th
                 scope="col"
                 className="px-2 py-3 has-tooltip"
                 data-tooltip-target="total-transactions"
               >
-                Transactions
+                Trades
                 <div
                   data-tooltip="total-transactions"
                   data-tooltip-placement="top"
@@ -88,10 +88,10 @@ function LedgerFooter(props: Props) {
                 </div>
               </th>
               <th scope="col" className="px-2 py-3">
-                Total Inventory Value
+                Inventory
               </th>
               <th data-tooltip-target="total-sold" className="has-tooltip">
-                Total Sold
+                Sold
                 <div
                   data-tooltip="total-sold"
                   data-tooltip-placement="top"
@@ -100,7 +100,7 @@ function LedgerFooter(props: Props) {
                   Price after fees/shipping
                 </div>
               </th>
-              <th>Total Bought</th>
+              <th>Bought</th>
               <th>Profit</th>
               {/* <th>Platform</th>
               <th>Bought</th> */}
@@ -108,10 +108,10 @@ function LedgerFooter(props: Props) {
           </thead>
           <tbody>
             {/* {data.map((item) => ( */}
-            <tr className="bg-[#31363F] border-t dark:bg-gray-800 dark:border-gray-700">
+            <tr className="bg-[#31363F] text-[12px] border-t dark:bg-gray-800 dark:border-gray-700">
               <th
                 scope="row"
-                className="px-6 py-4 font-medium text-white whitespace-nowrap dark:text-white"
+                className="px-3 py-4 font-medium text-white whitespace-nowrap dark:text-white"
               >
                 {data.length}
               </th>

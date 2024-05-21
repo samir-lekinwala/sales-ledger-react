@@ -19,7 +19,7 @@ import { Link } from 'react-router-dom'
 export function SpeedDialPlacement() {
   return (
     <div>
-      <div className="absolute top-0 right-0">
+      <div className="absolute z-50 top-0 right-0">
         <SpeedDial placement="top">
           <SpeedDialHandler>
             <IconButton size="lg" className="rounded-full">

@@ -1,4 +1,4 @@
-import BuyorSell from './BuyorSell'
+import Footer from './Footer'
 import HorizontalCard from './HorizontalCard'
 import Jumbotron from './Jumbotron'
 
@@ -7,6 +7,7 @@ function Home() {
     <>
       <Jumbotron />
       <HorizontalCard />
+      <Footer />
     </>
   )
 }

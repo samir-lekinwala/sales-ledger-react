@@ -1,73 +1,108 @@
-import { Input } from '@material-tailwind/react'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
-import React, { useEffect, useState } from 'react'
-import { Link, useParams } from 'react-router-dom'
-import { ToastContainer } from 'react-toastify'
-import { getItem, postFormData } from '../apis/fruits'
-import { itemSoldOrBought, notify } from '../functions/functions'
-import { ModuleNamespace } from 'vite/types/hot.js'
+import { useQuery } from '@tanstack/react-query'
+import { useEffect, useState } from 'react'
+import { useParams } from 'react-router-dom'
+
+import { getItem } from '../apis/fruits'
+
 import { item } from '../models/items'
 import BuyorSell from './BuyorSell'
 import BoughtForm from './BoughtForm'
+import SoldForm from './SoldForm'
 
 function EditForm() {
-  const { id } = useParams()
+  const { id, boughtOrSold } = useParams()
   const [data, setData] = useState<item>('')
 
+  console.log('mutaste data', data)
+
   useEffect(() => {
-    fetchData()
+    // fetchData()
+    // mutateAddBoughtTransaction.mutate()
+    useParams
   }, [])
 
-  async function fetchData() {
-    try {
-      const result = await getItem(Number(id))
-      setData(result.body[0])
-    } catch (error) {
-      console.error('Error fetching data:', error)
-    }
-  }
-  console.log('switched', data)
+  Example()
+  function Example() {
+    const { error, isLoading } = useQuery({
+      queryKey: ['item'],
+      queryFn: () =>
+        getItem(Number(id)).then((res) => {
+          setData(res.body[0])
+          return res
+        }),
+    })
 
-  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault()
-    const target = event.currentTarget
-    const form = new FormData(target)
-    const item = form.get('itembought')?.valueOf() as string
-    const price = form.get('howmuch')?.valueOf() as string
-    const shipping = form.get('shipping')?.valueOf() as number
-    const potentialSalePrice = form.get('potential-value')?.valueOf() as number
-    const soldOrBought = 'bought'
-    notify('success', `${item} has been successfully edited`)
-    // const inStock = form.get('inStock')?.valueOf() as number
+    if (isLoading) return 'Loading...'
 
-    const completedBoughtForm = {
-      item,
-      price,
-      soldOrBought,
-      shipping,
-      potentialSalePrice,
-    }
-    // await postFormData(completedBoughtForm)
-    mutateAddBoughtTransaction.mutate(completedBoughtForm)
-    target.reset()
+    if (error) return 'An error has occurred: ' + error
   }
-  const queryClient = useQueryClient()
-  const mutateAddBoughtTransaction = useMutation({
-    mutationFn: (completedBoughtForm: {
-      item: string
-      price: string
-      soldOrBought: string
-      shipping: number
-      potentialSalePrice: number
-    }) => postFormData(completedBoughtForm),
-    onSuccess: () => {
-      queryClient.invalidateQueries(['items'])
-    },
-  })
+
+  // async function fetchData() {
+  //   try {
+  //     const result = await getItem(Number(id))
+  //     setData(result.body[0])
+  //   } catch (error) {
+  //     console.error('Error fetching data:', error)
+  //   }
+  // }
+  // console.log('switched', data)
+
+  // async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+  //   event.preventDefault()
+  //   const target = event.currentTarget
+  //   const form = new FormData(target)
+  //   const item = form.get('itembought')?.valueOf() as string
+  //   const price = form.get('howmuch')?.valueOf() as string
+  //   const shipping = form.get('shipping')?.valueOf() as number
+  //   const potentialSalePrice = form.get('potential-value')?.valueOf() as number
+  //   const soldOrBought = 'bought'
+  //   notify('success', `${item} has been successfully edited`)
+  //   // const inStock = form.get('inStock')?.valueOf() as number
+
+  //   const completedBoughtForm = {
+  //     item,
+  //     price,
+  //     soldOrBought,
+  //     shipping,
+  //     potentialSalePrice,
+  //   }
+  //   // await postFormData(completedBoughtForm)
+  //   mutateAddBoughtTransaction.mutate(completedBoughtForm)
+  //   target.reset()
+  // }
+  // const queryClient = useQueryClient()
+  // const mutateAddBoughtTransaction = useMutation({
+  //   mutationFn: () => fetchData(),
+  //   onSuccess: () => {
+  //     queryClient.invalidateQueries(['item'])
+  //   },
+  // })
+  // const mutateAddBoughtTransaction = useMutation({
+  //   mutationFn: (completedBoughtForm: {
+  //     item: string
+  //     price: string
+  //     soldOrBought: string
+  //     shipping: number
+  //     potentialSalePrice: number
+  //   }) => postFormData(completedBoughtForm),
+  //   onSuccess: () => {
+  //     queryClient.invalidateQueries(['items'])
+  //   },
+  // })
 
   return (
     <div>
-      {data.soldOrBought == 'bought' ? <BoughtForm data={data} /> : <p>sold</p>}
+      {data && boughtOrSold == 'bought' ? (
+        <>
+          <BoughtForm data={data}>
+            <BuyorSell data={data} boughtOrSold={boughtOrSold} id={id} />
+          </BoughtForm>
+        </>
+      ) : (
+        <SoldForm data={data} shipping={data.shipping}>
+          <BuyorSell data={data} boughtOrSold={boughtOrSold} id={id} />
+        </SoldForm>
+      )}
     </div>
   )
 }

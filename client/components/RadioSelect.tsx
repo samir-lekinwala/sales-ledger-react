@@ -27,6 +27,7 @@ export function RadioHorizontalList() {
                 containerProps={{
                   className: 'p-0',
                 }}
+                crossOrigin={null}
               />
             </ListItemPrefix>
             <Typography
@@ -54,6 +55,7 @@ export function RadioHorizontalList() {
                 containerProps={{
                   className: 'p-0',
                 }}
+                crossOrigin={null}
               />
             </ListItemPrefix>
             <Typography

@@ -3,30 +3,29 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { patchFormData, postFormData } from '../apis/fruits'
 import { Link } from 'react-router-dom'
-import { SuccessAlert } from './SuccessAlert'
-import { useState } from 'react'
 import { notify } from '../functions/functions'
 
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
-import { Card, Input, CardProps } from '@material-tailwind/react'
-import { item } from '../models/items'
-import BuyorSell from './BuyorSell'
+import { Input } from '@material-tailwind/react'
+import { editedItem, item } from '../models/items'
 
 interface props {
   data?: item
+  children: React.ReactNode
 }
 
-function BoughtForm(props: props) {
-  const { data } = props
+function BoughtForm({ children, data }: props) {
   const id = data?.id
+
+  console.log('data for boughtform', data)
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
     const target = event.currentTarget
     const form = new FormData(target)
     const item = form.get('itembought')?.valueOf() as string
-    const price = form.get('howmuch')?.valueOf() as string
+    const price = form.get('howmuch')?.valueOf() as number
     const shipping = form.get('shipping')?.valueOf() as number
     const potentialSalePrice = form.get('potential-value')?.valueOf() as number
     const soldOrBought = 'bought'
@@ -62,28 +61,34 @@ function BoughtForm(props: props) {
   }
   const queryClient = useQueryClient()
   const mutateAddBoughtTransaction = useMutation({
-    mutationFn: (completedBoughtForm: {
-      item: string
-      price: string
-      soldOrBought: string
-      shipping: number
-      potentialSalePrice: number
-    }) => postFormData(completedBoughtForm),
+    mutationFn: (
+      completedBoughtForm: editedItem,
+      //   {
+      //   item: string
+      //   price: string
+      //   soldOrBought: string
+      //   shipping: number
+      //   potentialSalePrice: number
+      // }
+    ) => postFormData(completedBoughtForm),
     onSuccess: () => {
       queryClient.invalidateQueries(['items'])
     },
   })
   const mutateEditBoughtTransaction = useMutation({
-    mutationFn: (editedForm: {
-      id: number
-      item: string
-      price: string
-      soldOrBought: string
-      shipping: number
-      potentialSalePrice: number
-    }) => patchFormData(editedForm),
+    mutationFn: (
+      editedForm: editedItem,
+      // {
+      // id: number
+      // item: string
+      // price: string
+      // soldOrBought: string
+      // shipping: number
+      // potentialSalePrice: number
+      // }
+    ) => patchFormData(editedForm),
     onSuccess: () => {
-      queryClient.invalidateQueries(['items'])
+      queryClient.invalidateQueries(['item'])
     },
   })
 
@@ -97,7 +102,7 @@ function BoughtForm(props: props) {
               <p className="text-center mb-5 text-4xl font-jersey-25 uppercase">
                 Edit
               </p>
-              <BuyorSell boughtOrSold={data.soldOrBought} />
+              {children}
               <div className="w-96 flex flex-col gap-5 items-center">
                 <Input
                   className="focus:ring-0"
@@ -109,6 +114,7 @@ function BoughtForm(props: props) {
                   defaultValue={data.item}
                   placeholder="What have you bought?"
                   required
+                  crossOrigin={undefined}
                 ></Input>
                 <Input
                   color="white"
@@ -119,6 +125,7 @@ function BoughtForm(props: props) {
                   placeholder="For how much?"
                   label="Price"
                   defaultValue={data.price}
+                  crossOrigin={undefined}
                   required
                 ></Input>
                 <Input
@@ -131,6 +138,7 @@ function BoughtForm(props: props) {
                   label="Add potential value"
                   required
                   defaultValue={data.potentialSalePrice}
+                  crossOrigin={undefined}
                 ></Input>
                 <Input
                   className="focus:ring-0 block w-half p-4 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-md focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
@@ -142,6 +150,7 @@ function BoughtForm(props: props) {
                   color="white"
                   placeholder="Any shipping cost?"
                   label="Any shipping cost?"
+                  crossOrigin={undefined}
                 ></Input>
               </div>
               <div className="flex flex-row justify-between">
@@ -150,6 +159,9 @@ function BoughtForm(props: props) {
                 </button>
                 <span className="relative group-hover:opacity-100 ml-1 mt-5 text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-600 dark:focus:ring-blue-900">
                   <Link to={`/theledger`}>View Ledger</Link>
+                </span>
+                <span className="relative group-hover:opacity-100 ml-1 mt-5 text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-600 dark:focus:ring-blue-900">
+                  <Link to={`/inventory`}>Inventory</Link>
                 </span>
               </div>
             </div>
@@ -163,6 +175,7 @@ function BoughtForm(props: props) {
               <p className="text-center mb-5 text-4xl font-jersey-25 uppercase">
                 Bought
               </p>
+              {children}
               <div className="w-96 flex flex-col gap-5 items-center">
                 <Input
                   className="focus:ring-0"
@@ -173,6 +186,7 @@ function BoughtForm(props: props) {
                   name="itembought"
                   placeholder="What have you bought?"
                   required
+                  crossOrigin={undefined}
                 ></Input>
                 <Input
                   color="white"
@@ -183,6 +197,7 @@ function BoughtForm(props: props) {
                   placeholder="For how much?"
                   label="Price"
                   required
+                  crossOrigin={undefined}
                 ></Input>
                 <Input
                   color="white"
@@ -193,6 +208,7 @@ function BoughtForm(props: props) {
                   placeholder="Add potential value"
                   label="Add potential value"
                   required
+                  crossOrigin={undefined}
                 ></Input>
                 <Input
                   className="focus:ring-0 block w-half p-4 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-md focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
@@ -204,6 +220,7 @@ function BoughtForm(props: props) {
                   color="white"
                   placeholder="Any shipping cost?"
                   label="Any shipping cost?"
+                  crossOrigin={undefined}
                 ></Input>
               </div>
               <div className="flex flex-row justify-between">
@@ -212,6 +229,9 @@ function BoughtForm(props: props) {
                 </button>
                 <span className="relative group-hover:opacity-100 ml-1 mt-5 text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-600 dark:focus:ring-blue-900">
                   <Link to={`/theledger`}>View Ledger</Link>
+                </span>
+                <span className="relative group-hover:opacity-100 ml-1 mt-5 text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-600 dark:focus:ring-blue-900">
+                  <Link to={`/inventory`}>Inventory</Link>
                 </span>
               </div>
             </div>

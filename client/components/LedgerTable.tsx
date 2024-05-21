@@ -1,8 +1,6 @@
-import React from 'react'
 import * as models from '../models/items'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { deleteItem } from '../apis/fruits'
-import LedgerFooter from './LedgerFooter'
 import { dollarOrPercent, calculateFeesTotal } from '../functions/functions.tsx'
 import moment from 'moment'
 import { Link } from 'react-router-dom'
