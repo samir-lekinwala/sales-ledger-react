@@ -98,12 +98,12 @@ function BoughtForm({ children, data }: props) {
         <div className="flex flex-col gap-20 justify-center items-center">
           <ToastContainer position="top-center" />
           <form onSubmit={(e) => handleSubmit(e)}>
-            <div className="relative flex flex-col bg-clip-border rounded-xl bg-[#31363F] text-white shadow-gray-900/60 shadow-lg w-full max-w-full p-8">
+            <div className="relative flex flex-col bg-clip-border rounded-xl bg-[#31363F] text-white shadow-gray-900/60 shadow-lg sm:w-full sm:p-8 p-4 pb-10">
               <p className="text-center mb-5 text-4xl font-jersey-25 uppercase">
                 Edit
               </p>
               {children}
-              <div className="w-96 flex flex-col gap-5 items-center">
+              <div className="sm:w-96 flex flex-col gap-5 items-center">
                 <Input
                   className="focus:ring-0"
                   label="Item bought"
@@ -171,12 +171,12 @@ function BoughtForm({ children, data }: props) {
         <div className="flex flex-col gap-20 justify-center items-center">
           <ToastContainer position="top-center" />
           <form onSubmit={(e) => handleSubmit(e)}>
-            <div className="relative flex flex-col bg-clip-border rounded-xl bg-[#31363F] text-white shadow-gray-900/60 shadow-lg w-full max-w-full p-8">
+            <div className="relative flex flex-col bg-clip-border rounded-xl bg-[#31363F] text-white shadow-gray-900/60 shadow-lg sm:w-full sm:p-8 p-8 pb-10">
               <p className="text-center mb-5 text-4xl font-jersey-25 uppercase">
                 Bought
               </p>
               {children}
-              <div className="w-96 flex flex-col gap-5 items-center">
+              <div className="sm:w-96 flex flex-col gap-5 items-center">
                 <Input
                   className="focus:ring-0"
                   label="Item bought"
@@ -223,7 +223,7 @@ function BoughtForm({ children, data }: props) {
                   crossOrigin={undefined}
                 ></Input>
               </div>
-              <div className="flex flex-row justify-between">
+              <div className="flex flex-row gap-2 justify-between">
                 <button className="relative group-hover:opacity-100 ml-1 mt-5 text-[#eee] hover:text-white border border-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:hover:bg-red-600 dark:focus:ring-red-900">
                   Submit
                 </button>
@@ -231,7 +231,7 @@ function BoughtForm({ children, data }: props) {
                   <Link to={`/theledger`}>View Ledger</Link>
                 </span>
                 <span className="relative group-hover:opacity-100 ml-1 mt-5 text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-600 dark:focus:ring-blue-900">
-                  <Link to={`/inventory`}>Inventory</Link>
+                  <Link to={`/inventory`}>View Inventory</Link>
                 </span>
               </div>
             </div>

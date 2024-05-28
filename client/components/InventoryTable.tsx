@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import * as models from '../models/items.tsx'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { deleteItem, patchFormData } from '../apis/fruits'
@@ -6,6 +6,7 @@ import moment from 'moment'
 import { Link } from 'react-router-dom'
 import { Card, List, ListItem } from '@material-tailwind/react'
 import { useOutsideClick } from '../hooks/useOutsideClick.ts'
+import InventoryMenu from './InventoryMenu.tsx'
 
 interface Props {
   data: models.item[]
@@ -15,7 +16,11 @@ export default function InventoryTable(props: Props) {
   const [itemOptions, setItemOptions] = useState<number | null>()
   const [optionsVisible, setOptionsVisible] = useState<boolean | null>()
   const [editItemId, setEditItemId] = useState<number | null>(null)
+  const [rowHighlighted, setRowHighlighted] = useState<[]>([])
+  const [storedData, setStoredData] = useState(props.data)
+  const [sortedOrder, setSortedOrder] = useState(false)
 
+  console.log('stored data', storedData)
   function handleSubmit(
     event: React.FormEvent<HTMLFormElement>,
     itemId: number,
@@ -60,6 +65,7 @@ export default function InventoryTable(props: Props) {
       setItemOptions(null)
       setOptionsVisible(false)
     } else setItemOptions(itemId)
+    console.log('tested', itemId)
     setOptionsVisible(true)
   }
 
@@ -67,13 +73,80 @@ export default function InventoryTable(props: Props) {
     setOptionsVisible(false)
   })
 
-  // even:bg-[#484f5c]
+  function rowOnClick(itemId) {
+    const tempArray = [...rowHighlighted]
+
+    if (tempArray.includes(itemId)) {
+      tempArray.splice(tempArray.indexOf(itemId), 1)
+      setRowHighlighted((rowHighlighted) => [...tempArray])
+    } else setRowHighlighted((rowHighlighted) => [...rowHighlighted, itemId])
+  }
+
+  function idIncludedInSelected(element) {
+    return rowHighlighted.includes(element)
+  }
+
+  const headerMap = new Map([
+    ['Item', 'item'],
+    ['Date', 'created_at'],
+    ['Price', 'price'],
+    ['Shipping', 'shipping'],
+    ['Net price', 'netprice'],
+    ['Value', 'potentialSalePrice'],
+    ['Platform', 'platform'],
+  ])
+
+  function sortData(column) {
+    setSortedOrder(!sortedOrder)
+    const type = headerMap.get(column)
+    console.log(type)
+    // console.log('column', column.toLowerCase())
+    let newData
+    if (type !== 'created_at' && sortedOrder) {
+      newData = storedData.sort((a, b) => a[type] - b[type])
+      setStoredData(newData)
+      console.log('test3', storedData)
+    } else if (!sortedOrder) {
+      newData = storedData.sort((a, b) => b[type] - a[type])
+      setStoredData(newData)
+      console.log('test4', storedData)
+    }
+    if (type == 'created_at') {
+      newData = storedData.sort(
+        (a, b) => new Date(a.created_at) - new Date(b.created_at),
+      )
+      setStoredData(newData)
+      console.log('test2', storedData)
+    }
+    console.log('sorted data test', storedData)
+  }
+
+  useEffect(() => {
+    addNetPriceToData()
+  }, [])
+
+  function addNetPriceToData() {
+    const newData = []
+    for (let i = 0; i < storedData.length; i++) {
+      newData.push({
+        ...storedData[i],
+        netprice: storedData[i].shipping + storedData[i].price,
+      })
+    }
+    setStoredData(newData)
+  }
 
   function addItemsToTable(item: models.item) {
     return (
       <tr
         key={item.id}
-        className="even:bg-[#222831] group/item font-inter text-xs group text-white border-b bg-[#31363F] dark:bg-gray-800 dark:border-gray-700"
+        className={`${
+          idIncludedInSelected(item.id)
+            ? 'bg-[#76ABAE] group/item font-inter text-xs group text-white border-b bg-[#31363F] dark:bg-gray-800 dark:border-gray-700'
+            : 'hover:bg-[#76ABAE] even:bg-[#222831] group/item font-inter text-xs group text-white border-b bg-[#31363F] dark:bg-gray-800 dark:border-gray-700'
+        }`}
+        id="table-row-inventory"
+        onClick={() => rowOnClick(item.id)}
       >
         <th
           scope="row"
@@ -88,7 +161,8 @@ export default function InventoryTable(props: Props) {
 
           {/* <div className="w-fit opacity-0 group-hover/item:opacity-100 hover flex flex-col gap-4"> */}
           {item.id == itemOptions && optionsVisible ? (
-            <Card ref={ref} className="w-20 absolute z-20">
+            // <InventoryMenu />
+            <Card id="rowCard" ref={ref} className="w-20 absolute z-20">
               <List>
                 <ListItem
                   className="w-16"
@@ -127,8 +201,8 @@ export default function InventoryTable(props: Props) {
         <td className="px-3">${item.price}</td>
         <td className="px-3">${item.shipping}</td>
         {/* need to make below into fee */}
-
-        <td className="px-3 font-bold">${item.price + item.shipping}</td>
+        {/* net price */}
+        <td className="px-3 font-bold">${item.netPrice}</td>
         {editItemId === item.id ? (
           <div className="py-5 relative">
             <form onSubmit={(e) => handleSubmit(e, item.id)}>
@@ -175,14 +249,18 @@ export default function InventoryTable(props: Props) {
         <thead className="z-20 sticky top-0 text-xs uppercase bg-[#EEEEEE] text-[#222831]">
           <tr className="h-2.5">
             {tableHeaders.map((header) => (
-              <th key={header} className="px-1">
+              <th
+                key={header}
+                className="px-1"
+                onClick={() => sortData(header)}
+              >
                 {header}
               </th>
             ))}
           </tr>
         </thead>
         <tbody>
-          {data.map((item: models.item) =>
+          {storedData.map((item: models.item) =>
             item.soldOrBought === 'bought' ? addItemsToTable(item) : null,
           )}
         </tbody>

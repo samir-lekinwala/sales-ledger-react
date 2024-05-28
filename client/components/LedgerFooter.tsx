@@ -33,7 +33,6 @@ function LedgerFooter(props: Props) {
       if (data[i].soldOrBought === 'bought') {
         boughtTotal += calculateFeesTotal(data[i])
       } else if (data[i].soldOrBought === 'sold') {
-        console.log(calculateFeesTotal(data[i]), 'calculatefeestotal', data[i])
         soldTotal += calculateFeesTotal(data[i])
       }
     }
@@ -42,9 +41,7 @@ function LedgerFooter(props: Props) {
       soldTotal: soldTotal.toFixed(2),
       profit: (soldTotal - boughtTotal).toFixed(2),
     }
-    console.log('totals', totals)
     setBoughtAndSold(totals)
-    console.log('state', boughtAndSold)
     return totals
   }
 

@@ -1,4 +1,4 @@
-import React from 'react'
+import { useState } from 'react'
 import {
   IconButton,
   Typography,
@@ -15,6 +15,8 @@ import { InboxIcon } from '@heroicons/react/24/solid'
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
 import { Link } from 'react-router-dom'
 import * as models from '../models/items.tsx'
+import Footer from './Footer.tsx'
+import Logo from './Logo.tsx'
 
 interface Props {
   data: models.item[]
@@ -25,7 +27,7 @@ export function BurgerMenu(props: Props) {
 
   // const [open, setOpen] = React.useState(0)
   // const [openAlert, setOpenAlert] = React.useState(true)
-  const [isDrawerOpen, setIsDrawerOpen] = React.useState(false)
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false)
 
   function numberOfItemsInInventory() {
     return data.filter((item) => item.soldOrBought == 'bought').length
@@ -33,8 +35,6 @@ export function BurgerMenu(props: Props) {
   function numberOfItemsInLedger() {
     return data.length
   }
-
-  console.log(numberOfItemsInInventory())
 
   const customTheme = {
     ...{
@@ -82,20 +82,22 @@ export function BurgerMenu(props: Props) {
             shadow={false}
             className="h-[calc(100vh-2rem)] w-full p-4"
           >
-            <div className="mb-2 flex items-center gap-4 p-4">
-              <img
-                src="../client/images/minimal-book-v2-black.png"
-                alt="Sales Ledger Logo"
-                className="h-8"
-              />
-              <Typography
-                variant="h5"
-                color="black"
-                className="font-poppins text-4xl"
-              >
-                Sales Ledger
-              </Typography>
-            </div>
+            <Link to={`/`} onClick={closeDrawer}>
+              <div className="mb-2 justify-center flex flex-wrap flex-row p-4">
+                {/* <Logo
+                  width={60}
+                  colour="black"
+                  classes="justify-center flex flex-wrap flex-row h-8"
+                /> */}
+                <Typography
+                  variant="h5"
+                  color="black"
+                  className="font-poppins text-3xl"
+                >
+                  Sales Ledger
+                </Typography>
+              </div>
+            </Link>
             {/* <div className="p-2">
             <Input
               icon={<MagnifyingGlassIcon className="h-5 w-5" />}
@@ -157,6 +159,9 @@ export function BurgerMenu(props: Props) {
                 Log Out
               </ListItem> */}
             </List>
+            <div className="relative top-[calc(80vh-250px)]">
+              <Footer colour={'black'} />
+            </div>
           </Card>
         </Drawer>
       </ThemeProvider>

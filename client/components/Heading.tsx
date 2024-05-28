@@ -11,7 +11,11 @@ function Heading() {
         <header className="text-white w-full text-2xl absolute text-center top-2">
           <Link to="/">
             <div className="inline-block sm:bottom-8 relative top-1 mr-2 outline-white">
-              <Logo width={60} classes={'sm:relative sm:bottom-4'} />
+              <Logo
+                width={60}
+                colour={'white'}
+                classes={'sm:relative sm:bottom-4'}
+              />
             </div>
             <h1 className="inline-block sm:bottom-2 relative mr-2 outline-white sm:text-5xl text-2xl font-poppins">
               Sales Ledger

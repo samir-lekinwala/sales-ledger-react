@@ -10,7 +10,6 @@ export function calculateFeesTotal(item: models.item) {
   const afterFeesAndShipping = item.price - item.shipping - fee
 
   if (item.soldOrBought === 'sold') {
-    console.log('sold')
     return calculateIfItemSold(item)
   } else if (item.soldOrBought === 'bought') {
     return item.price + item.shipping

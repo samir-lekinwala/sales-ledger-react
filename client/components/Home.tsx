@@ -7,7 +7,7 @@ function Home() {
     <>
       <Jumbotron />
       <HorizontalCard />
-      <Footer />
+      <Footer colour="white" />
     </>
   )
 }

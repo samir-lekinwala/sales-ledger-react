@@ -379,12 +379,12 @@ function SoldForm({ children, data }: props) {
         <div className="flex flex-col gap-20 justify-center items-center">
           <ToastContainer position="top-center" />
           <form onSubmit={(e) => handleSubmit(e)}>
-            <div className="relative flex flex-col bg-clip-border rounded-xl bg-[#31363F] text-white shadow-gray-900/60 shadow-lg w-full max-w-full p-8">
+            <div className="relative flex flex-col bg-clip-border rounded-xl bg-[#31363F] text-white shadow-gray-900/60 shadow-lg sm:w-full sm:p-8 p-8 pb-10">
               <p className="text-center mb-5 text-4xl font-jersey-25 uppercase">
                 Edit
               </p>
               {children}
-              <div className="w-96 flex flex-col gap-5 items-center">
+              <div className="sm:w-96 flex flex-col gap-5 w-full items-center">
                 <Input
                   className="focus:ring-0 block w-half p-4 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-md focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   type="text"
@@ -561,11 +561,11 @@ function SoldForm({ children, data }: props) {
         <div className="flex flex-col gap-20 justify-center items-center">
           <ToastContainer position="top-center" />
           <form onSubmit={(e) => handleSubmit(e)}>
-            <div className="relative flex flex-col bg-clip-border rounded-xl bg-[#31363F] text-white shadow-gray-900/60 shadow-lg w-full max-w-full p-8">
+            <div className="relative flex flex-col bg-clip-border rounded-xl bg-[#31363F] text-white shadow-gray-900/60 shadow-lg sm:w-full sm:p-8 p-8 pb-10">
               <p className="text-center mb-5 text-4xl font-jersey-25 uppercase">
                 Sold
               </p>
-              <div className="w-96 flex flex-col gap-5 items-center">
+              <div className="sm:w-96 flex flex-col gap-5 items-center">
                 <Input
                   className="focus:ring-0 block w-half p-4 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-md focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   type="text"
