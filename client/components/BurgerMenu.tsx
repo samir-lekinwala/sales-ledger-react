@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import {
   IconButton,
   Typography,
@@ -13,7 +13,7 @@ import {
 } from '@material-tailwind/react'
 import { InboxIcon } from '@heroicons/react/24/solid'
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import * as models from '../models/items.tsx'
 import Footer from './Footer.tsx'
 import Logo from './Logo.tsx'
@@ -23,6 +23,22 @@ interface Props {
 }
 
 export function BurgerMenu(props: Props) {
+  const location = useLocation()
+  const { pathname } = location
+
+  function checkPath() {
+    if (pathname == '/theledger') {
+      setCurrentPath('ledger')
+    } else if (pathname == '/inventory') {
+      setCurrentPath('inventory')
+    }
+  }
+  useEffect(() => {
+    checkPath()
+  }, [location])
+
+  const [currentPath, setCurrentPath] = useState()
+  console.log(currentPath)
   const data = props.data
 
   // const [open, setOpen] = React.useState(0)
@@ -104,13 +120,21 @@ export function BurgerMenu(props: Props) {
               label="Search"
             />
           </div> */}
-            <List>
+            <List className="text-black">
               <hr className="my-2 border-blue-gray-50" />
-              <ListItem>
+              <ListItem
+                className={`${
+                  currentPath == 'inventory' ? 'bg-[#76ABAE] text-black' : null
+                }`}
+              >
                 <ListItemPrefix>
                   <InboxIcon className="h-5 w-5" />
                 </ListItemPrefix>
-                <Link to="/inventory" onClick={closeDrawer}>
+                <Link
+                  // className="bg-black"
+                  to="/inventory"
+                  onClick={closeDrawer}
+                >
                   Inventory
                 </Link>
                 <ListItemSuffix>
@@ -123,7 +147,11 @@ export function BurgerMenu(props: Props) {
                   />
                 </ListItemSuffix>
               </ListItem>
-              <ListItem>
+              <ListItem
+                className={`${
+                  currentPath == 'ledger' ? 'bg-[#76ABAE] text-black' : null
+                }`}
+              >
                 <ListItemPrefix>
                   <InboxIcon className="h-5 w-5" />
                 </ListItemPrefix>

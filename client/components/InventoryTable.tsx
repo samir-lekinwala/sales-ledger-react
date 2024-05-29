@@ -7,9 +7,11 @@ import { Link } from 'react-router-dom'
 import { Card, List, ListItem } from '@material-tailwind/react'
 import { useOutsideClick } from '../hooks/useOutsideClick.ts'
 import InventoryMenu from './InventoryMenu.tsx'
+import { calculateFeesTotal } from '../functions/functions.tsx'
 
 interface Props {
   data: models.item[]
+  page: string
 }
 
 export default function InventoryTable(props: Props) {
@@ -17,10 +19,42 @@ export default function InventoryTable(props: Props) {
   const [optionsVisible, setOptionsVisible] = useState<boolean | null>()
   const [editItemId, setEditItemId] = useState<number | null>(null)
   const [rowHighlighted, setRowHighlighted] = useState<[]>([])
-  const [storedData, setStoredData] = useState(props.data)
+  const [storedData, setStoredData] = useState(boughtItemsFilter())
   const [sortedOrder, setSortedOrder] = useState(false)
+  const [tableHeaders, setTableHeaders] = useState(tableHeadersBasedOnPage())
 
-  console.log('stored data', storedData)
+  function tableHeadersBasedOnPage() {
+    if (props.page == 'inventory') {
+      return [
+        'Item',
+        'Date',
+        'Price',
+        'Shipping',
+        'Net price',
+        // 'Price after Fees/Shipping',
+        'Value',
+        'Platform',
+      ]
+    } else if (props.page == 'ledger') {
+      return [
+        'Item',
+        'Date',
+        'Price',
+        'Shipping',
+        'Fee',
+        'Price after Fees/Shipping',
+        'Platform',
+        'Sold / Bought',
+      ]
+    }
+  }
+
+  function boughtItemsFilter() {
+    if (props.page == 'inventory') {
+      return props.data.reverse().filter((x) => x.soldOrBought == 'bought')
+    } else return props.data.reverse()
+  }
+
   function handleSubmit(
     event: React.FormEvent<HTMLFormElement>,
     itemId: number,
@@ -28,10 +62,7 @@ export default function InventoryTable(props: Props) {
     event.preventDefault()
     const formData = new FormData(event.currentTarget)
     const potentialValue = formData.get('potentialValue')?.valueOf() as number
-    console.log(potentialValue)
-
     const submitForm = { id: itemId, potentialSalePrice: potentialValue }
-    console.log(submitForm)
     mutateEditTransaction.mutate(submitForm)
   }
 
@@ -57,7 +88,6 @@ export default function InventoryTable(props: Props) {
 
   function handleDoubleClick(id: number) {
     setEditItemId(id)
-    console.log('item id set')
   }
 
   function handleItemOptions(itemId: number) {
@@ -65,7 +95,6 @@ export default function InventoryTable(props: Props) {
       setItemOptions(null)
       setOptionsVisible(false)
     } else setItemOptions(itemId)
-    console.log('tested', itemId)
     setOptionsVisible(true)
   }
 
@@ -99,26 +128,32 @@ export default function InventoryTable(props: Props) {
   function sortData(column) {
     setSortedOrder(!sortedOrder)
     const type = headerMap.get(column)
-    console.log(type)
-    // console.log('column', column.toLowerCase())
     let newData
     if (type !== 'created_at' && sortedOrder) {
       newData = storedData.sort((a, b) => a[type] - b[type])
       setStoredData(newData)
-      console.log('test3', storedData)
     } else if (!sortedOrder) {
       newData = storedData.sort((a, b) => b[type] - a[type])
       setStoredData(newData)
-      console.log('test4', storedData)
     }
-    if (type == 'created_at') {
+    if (type == 'created_at' && !sortedOrder) {
       newData = storedData.sort(
         (a, b) => new Date(a.created_at) - new Date(b.created_at),
       )
       setStoredData(newData)
-      console.log('test2', storedData)
+    } else if (type == 'created_at' && sortedOrder) {
+      newData = storedData.sort(
+        (a, b) => new Date(b.created_at) - new Date(a.created_at),
+      )
+      setStoredData(newData)
     }
-    console.log('sorted data test', storedData)
+    if (type == 'item' && !sortedOrder) {
+      newData = storedData.sort((a, b) => a[type].localeCompare(b[type]))
+      setStoredData(newData)
+    } else if (type == 'item' && sortedOrder) {
+      newData = storedData.sort((a, b) => b[type].localeCompare(a[type]))
+      setStoredData(newData)
+    }
   }
 
   useEffect(() => {
@@ -154,32 +189,16 @@ export default function InventoryTable(props: Props) {
           onClick={() => handleItemOptions(item.id)}
         >
           <div>{item.item}</div>
-
-          {/* <Link className="" to={`/edit/${item.soldOrBought}/${item.id}`}>
-            {item.item}
-          </Link> */}
-
-          {/* <div className="w-fit opacity-0 group-hover/item:opacity-100 hover flex flex-col gap-4"> */}
           {item.id == itemOptions && optionsVisible ? (
             // <InventoryMenu />
             <Card id="rowCard" ref={ref} className="w-20 absolute z-20">
               <List>
-                <ListItem
-                  className="w-16"
-                  // size=""
-                  // className="text-blue-700"
-                  // className="mt-2 ml-3 inline-block text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-2 py-1 text-center me-2 mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-600 dark:focus:ring-blue-900"
-                >
+                <ListItem className="w-16">
                   <Link to={`/edit/${item.soldOrBought}/${item.id}`}>Edit</Link>
 
                   {/* Edit */}
                 </ListItem>
-                <ListItem
-                  className="w-16 text-blue-700 hover:text-white hover:bg-blue-700"
-                  // size=""
-                  // className="text-blue-700"
-                  // className="mt-2 ml-3 inline-block text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-2 py-1 text-center me-2 mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-600 dark:focus:ring-blue-900"
-                >
+                <ListItem className="w-16 text-blue-700 hover:text-white hover:bg-blue-700">
                   <Link to={`/edit/sold/${item.id}`}>Sold</Link>
 
                   {/* Edit */}
@@ -187,8 +206,6 @@ export default function InventoryTable(props: Props) {
                 <ListItem
                   className="w-16 flex justify-center text-[#ff2525] hover:text-[#fff] hover:bg-[#ff0000]"
                   onClick={() => mutateDeleteTransaction.mutate(item.id)}
-                  // className="text-red-700 my-2"
-                  // className="mt-2 ml-3 inline-block text-red-700 hover:text-white border border-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-2 py-1 text-center me-2 mb-2 dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:hover:bg-red-600 dark:focus:ring-red-900"
                 >
                   Delete
                 </ListItem>
@@ -202,7 +219,18 @@ export default function InventoryTable(props: Props) {
         <td className="px-3">${item.shipping}</td>
         {/* need to make below into fee */}
         {/* net price */}
-        <td className="px-3 font-bold">${item.netPrice}</td>
+        {/* {item.soldOrBought === 'sold' ? (
+          <td className="px-3 text-white">
+            $
+            {
+              calculateFeesTotal(item).toFixed(2)
+              // item.price - item.shipping - fee
+            }
+          </td>
+        ) : ( */}
+        <td className="px-3 font-bold">${item.netprice}</td>
+        {/* )} */}
+
         {editItemId === item.id ? (
           <div className="py-5 relative">
             <form onSubmit={(e) => handleSubmit(e, item.id)}>
@@ -227,44 +255,46 @@ export default function InventoryTable(props: Props) {
         )}
 
         <td className="px-3">{item.platform}</td>
+        {item.soldOrBought === 'bought' ? (
+          <td className="px-3 text-white">Bought</td>
+        ) : (
+          <td className="px-3 text-rose-600">Sold</td>
+        )}
       </tr>
     )
   }
 
-  const tableHeaders = [
-    'Item',
-    'Date',
-    'Price',
-    'Shipping',
-    'Net price',
-    // 'Price after Fees/Shipping',
-    'Value',
-    'Platform',
-  ]
   // max-h-[calc(90vh-93px)]
+  // bg-[#76ABAE]
 
   return (
-    <div className="max-h-[calc(100vh-150px)] overflow-x-auto shadow-md rounded-lg">
-      <table className="w-full table-auto text-left">
-        <thead className="z-20 sticky top-0 text-xs uppercase bg-[#EEEEEE] text-[#222831]">
-          <tr className="h-2.5">
-            {tableHeaders.map((header) => (
-              <th
-                key={header}
-                className="px-1"
-                onClick={() => sortData(header)}
-              >
-                {header}
-              </th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {storedData.map((item: models.item) =>
-            item.soldOrBought === 'bought' ? addItemsToTable(item) : null,
-          )}
-        </tbody>
-      </table>
-    </div>
+    <>
+      <div className="max-h-[calc(100vh-150px)] overflow-x-auto shadow-md rounded-lg">
+        <div className="bg-[#eee] fixed h-8 w-full rounded-lg flex justify-center font-poppins border-t-4 border-[#76ABAE]">
+          {props.page.toUpperCase()}
+        </div>
+        <div className=" w-full flex justify-center bg-[#eee]">
+          {props.page.toUpperCase()}
+        </div>
+        <table className="w-full table-auto text-left ">
+          <thead className="z-20 sticky top-0 text-xs uppercase bg-[#EEEEEE] text-[#222831]">
+            <tr className="h-2.5">
+              {tableHeaders.map((header) => (
+                <th
+                  key={header}
+                  className={`px-1`}
+                  onClick={() => sortData(header)}
+                >
+                  {header}
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {storedData.map((item: models.item) => addItemsToTable(item))}
+          </tbody>
+        </table>
+      </div>
+    </>
   )
 }

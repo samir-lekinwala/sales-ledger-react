@@ -14,9 +14,9 @@ table {
   border-radius: 1rem;
 }
 
-#table-header-inventory:hover {
+/* #table-header-inventory:hover {
   text-shadow: 1px 1px 1px black;
-}
+} */
 /* #table-row-inventory:hover {
   text-shadow: 1px 1px 1px black;
 }

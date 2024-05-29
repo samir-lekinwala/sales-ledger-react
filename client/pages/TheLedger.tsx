@@ -5,6 +5,7 @@ import LedgerTable from '../components/LedgerTable'
 import Footer from '../components/LedgerFooter'
 import LedgerFooter from '../components/LedgerFooter'
 import BuyorSell from '../components/BuyorSell'
+import InventoryTable from '../components/InventoryTable'
 
 function TheLedger() {
   const { data, isLoading, isError, error } = useQuery({
@@ -16,8 +17,9 @@ function TheLedger() {
 
   return (
     <div>
-      <BuyorSell />
-      <LedgerTable data={data.body} />
+      {/* <BuyorSell /> */}
+      <InventoryTable data={data.body} page={'ledger'} />
+      {/* <LedgerTable data={data.body} /> */}
       <LedgerFooter data={data.body} />
     </div>
   )

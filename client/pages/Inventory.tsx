@@ -13,7 +13,7 @@ function Inventory() {
 
   return (
     <>
-      <InventoryTable data={data.body} />
+      <InventoryTable page={'inventory'} data={data.body} />
       <LedgerFooter data={data.body} />
     </>
   )

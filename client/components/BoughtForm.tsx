@@ -9,6 +9,7 @@ import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import { Input } from '@material-tailwind/react'
 import { editedItem, item } from '../models/items'
+import LedgerFooter from './LedgerFooter'
 
 interface props {
   data?: item
@@ -171,7 +172,7 @@ function BoughtForm({ children, data }: props) {
         <div className="flex flex-col gap-20 justify-center items-center">
           <ToastContainer position="top-center" />
           <form onSubmit={(e) => handleSubmit(e)}>
-            <div className="relative flex flex-col bg-clip-border rounded-xl bg-[#31363F] text-white shadow-gray-900/60 shadow-lg sm:w-full sm:p-8 p-8 pb-10">
+            <div className="relative flex flex-col bg-clip-border rounded-xl bg-[#31363F] text-white shadow-gray-900/60 shadow-lg max-w-[340px] sm:max-w-full sm:w-full sm:p-8 p-8 pb-10">
               <p className="text-center mb-5 text-4xl font-jersey-25 uppercase">
                 Bought
               </p>
