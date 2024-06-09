@@ -8,6 +8,9 @@ import { Card, List, ListItem } from '@material-tailwind/react'
 import { useOutsideClick } from '../hooks/useOutsideClick.ts'
 import InventoryMenu from './InventoryMenu.tsx'
 import { calculateFeesTotal } from '../functions/functions.tsx'
+import { Float } from '@headlessui-float/react'
+import { Button, Menu, MenuItems } from '@headlessui/react'
+import MenuComponent from './MenuComponent.tsx'
 
 interface Props {
   data: models.item[]
@@ -15,13 +18,73 @@ interface Props {
 }
 
 export default function InventoryTable(props: Props) {
+  const { data } = props
+
   const [itemOptions, setItemOptions] = useState<number | null>()
   const [optionsVisible, setOptionsVisible] = useState<boolean | null>()
   const [editItemId, setEditItemId] = useState<number | null>(null)
   const [rowHighlighted, setRowHighlighted] = useState<[]>([])
+  // const [rawData, setRawData] = useState()
   const [storedData, setStoredData] = useState(boughtItemsFilter())
   const [sortedOrder, setSortedOrder] = useState(false)
   const [tableHeaders, setTableHeaders] = useState(tableHeadersBasedOnPage())
+
+  // function updatingRawData() {
+  //   try {
+  //     setRawData(props.data)
+  //     console.log('test56', rawData)
+  //     return props.data
+  //   } catch (error) {
+  //     console.log(error)
+  //   }
+
+  //   // console.log('from update func', props.data)
+  //   // // setRawData(props.data)
+  //   // setRawData(props.data)
+  //   // console.log('raw test555', rawData)
+  //   // return props.data
+  //   // console.log('raw after func', rawData)
+  // }
+
+  useEffect(() => {
+    // const filtered = boughtItemsFilter()
+    setStoredData(boughtItemsFilter())
+    // updatingRawData()
+    // setRawData(props.data)
+    // boughtItemsFilter(props.data)
+    // console.log('raw from effect', rawData)
+
+    // addNetPriceToData()
+  }, [props.data])
+
+  // useEffect(() => {
+  //   addNetPriceToData()
+  // }, [])
+
+  function addNetPriceToData(data: models.item[]) {
+    const newData = []
+    for (let i = 0; i < data.length; i++) {
+      newData.push({
+        ...data[i],
+        netprice: data[i].shipping + data[i].price,
+      })
+    }
+    return newData
+  }
+
+  function boughtItemsFilter() {
+    if (props.page == 'inventory') {
+      const filterResult = props.data
+        // .reverse()
+        .filter((x) => x.inventory == true)
+
+      const result = addNetPriceToData(filterResult)
+      return result
+    } else {
+      console.log('the else statement')
+      return addNetPriceToData(props.data)
+    }
+  }
 
   function tableHeadersBasedOnPage() {
     if (props.page == 'inventory') {
@@ -42,18 +105,15 @@ export default function InventoryTable(props: Props) {
         'Price',
         'Shipping',
         'Fee',
-        'Price after Fees/Shipping',
+        'Net price',
+        'Value',
         'Platform',
         'Sold / Bought',
       ]
     }
   }
 
-  function boughtItemsFilter() {
-    if (props.page == 'inventory') {
-      return props.data.reverse().filter((x) => x.soldOrBought == 'bought')
-    } else return props.data.reverse()
-  }
+  // const rawData = props.data
 
   function handleSubmit(
     event: React.FormEvent<HTMLFormElement>,
@@ -73,18 +133,17 @@ export default function InventoryTable(props: Props) {
       patchFormData(submitForm),
     onSuccess: () => {
       queryClient.invalidateQueries(['items'])
+      setStoredData(boughtItemsFilter())
       setEditItemId(null)
     },
   })
 
-  const { data } = props
-
-  const mutateDeleteTransaction = useMutation({
-    mutationFn: (id: number) => deleteItem(id),
-    onSuccess: () => {
-      queryClient.invalidateQueries(['items'])
-    },
-  })
+  //  const mutateDeleteTransaction = useMutation({
+  //     mutationFn: (id: number) => deleteItem(id),
+  //     onSuccess: () => {
+  //       queryClient.invalidateQueries(['items'])
+  //     },
+  //   })
 
   function handleDoubleClick(id: number) {
     setEditItemId(id)
@@ -156,22 +215,14 @@ export default function InventoryTable(props: Props) {
     }
   }
 
-  useEffect(() => {
-    addNetPriceToData()
-  }, [])
-
-  function addNetPriceToData() {
-    const newData = []
-    for (let i = 0; i < storedData.length; i++) {
-      newData.push({
-        ...storedData[i],
-        netprice: storedData[i].shipping + storedData[i].price,
-      })
-    }
-    setStoredData(newData)
-  }
-
   function addItemsToTable(item: models.item) {
+    const singleFee = calculateFeesTotal(item).toFixed(2)
+
+    const fee = (item.price - calculateFeesTotal(item) - item.shipping).toFixed(
+      2,
+    )
+    console.log(singleFee, fee)
+
     return (
       <tr
         key={item.id}
@@ -188,46 +239,25 @@ export default function InventoryTable(props: Props) {
           className="font-medium text-[#EEEEEE] text-left relative left-2"
           onClick={() => handleItemOptions(item.id)}
         >
-          <div>{item.item}</div>
-          {item.id == itemOptions && optionsVisible ? (
-            // <InventoryMenu />
-            <Card id="rowCard" ref={ref} className="w-20 absolute z-20">
-              <List>
-                <ListItem className="w-16">
-                  <Link to={`/edit/${item.soldOrBought}/${item.id}`}>Edit</Link>
-
-                  {/* Edit */}
-                </ListItem>
-                <ListItem className="w-16 text-blue-700 hover:text-white hover:bg-blue-700">
-                  <Link to={`/edit/sold/${item.id}`}>Sold</Link>
-
-                  {/* Edit */}
-                </ListItem>
-                <ListItem
-                  className="w-16 flex justify-center text-[#ff2525] hover:text-[#fff] hover:bg-[#ff0000]"
-                  onClick={() => mutateDeleteTransaction.mutate(item.id)}
-                >
-                  Delete
-                </ListItem>
-              </List>
-            </Card>
-          ) : null}
-          {/* </div> */}
+          <InventoryMenu item={item} />
         </th>
         <td className="px-3">{moment(item.created_at).format('lll')}</td>
-        <td className="px-3">${item.price}</td>
+        <td className="px-1">${item.price}</td>
         <td className="px-3">${item.shipping}</td>
         {/* need to make below into fee */}
         {/* net price */}
-        {/* {item.soldOrBought === 'sold' ? (
+        {item.soldOrBought === 'sold' ? (
           <td className="px-3 text-white">
             $
             {
-              calculateFeesTotal(item).toFixed(2)
+              fee
               // item.price - item.shipping - fee
             }
           </td>
-        ) : ( */}
+        ) : (
+          <td>$0</td>
+        )}
+
         <td className="px-3 font-bold">${item.netprice}</td>
         {/* )} */}
 
@@ -253,13 +283,14 @@ export default function InventoryTable(props: Props) {
             ${item.potentialSalePrice}
           </td>
         )}
-
         <td className="px-3">{item.platform}</td>
-        {item.soldOrBought === 'bought' ? (
-          <td className="px-3 text-white">Bought</td>
-        ) : (
-          <td className="px-3 text-rose-600">Sold</td>
-        )}
+        {props.page == 'ledger' ? (
+          item.soldOrBought === 'bought' ? (
+            <td className="px-3 text-white">Bought</td>
+          ) : (
+            <td className="px-3 text-rose-600">Sold</td>
+          )
+        ) : null}
       </tr>
     )
   }

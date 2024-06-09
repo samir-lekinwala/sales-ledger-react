@@ -1,7 +1,12 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query'
+import {
+  QueryKey,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from '@tanstack/react-query'
 import React, { useEffect, useState } from 'react'
-import { patchFormData, postFormData } from '../apis/fruits'
-import { Link } from 'react-router-dom'
+import { getItem, patchFormData, postFormData } from '../apis/fruits'
+import { Link, useParams } from 'react-router-dom'
 import { ToastContainer } from 'react-toastify'
 import { notify } from '../functions/functions'
 import { Input, Option, Select } from '@material-tailwind/react'
@@ -37,10 +42,30 @@ interface props {
 }
 
 function SoldForm({ children, data }: props) {
+  const { boughtId } = useParams()
+
   let testingData: number
-  // console.log('test1', testingData)
-  // const id = data?.id
-  // console.log('from sold form', data, 'children', children)
+  const [boughtData, setBoughtData] = useState<item>()
+
+  async function getBoughtData() {
+    const response = await getItem(Number(boughtId))
+
+    const data = JSON.parse(response.text)
+    return data[0]
+  }
+
+  useEffect(() => {
+    const fetchBoughtData = async () => {
+      try {
+        const data = await getBoughtData()
+        setBoughtData(data)
+      } catch (error) {
+        console.error('Failed to fetch bought data', error)
+      }
+    }
+
+    fetchBoughtData()
+  }, [boughtId])
 
   const trademeFee = 0.079 //7.9%
 
@@ -307,12 +332,22 @@ function SoldForm({ children, data }: props) {
 
     // const percentOrDollarVariable = percentOrDollar(platform)
     const completedSoldForm = createSoldForm(platform, fees)
+
     let editedCompleteSoldForm
     if (id) {
       console.log('id for edit', id)
       editedCompleteSoldForm = { ...completedSoldForm, id: id }
       console.log('edited completed sold form', editedCompleteSoldForm)
       mutateEditBoughtTransaction.mutate(editedCompleteSoldForm)
+    } else if (boughtId) {
+      const boughtToSoldForm = {
+        ...completedSoldForm,
+        bought_Id: Number(boughtId),
+      }
+      console.log(boughtToSoldForm)
+      mutateAddSoldTransaction.mutate(boughtToSoldForm)
+      mutateEditBoughtTransaction.mutate({ id: Number(boughtId), inventory: 0 })
+      target.reset()
     } else {
       mutateAddSoldTransaction.mutate(completedSoldForm)
       // console.log(completedSoldForm, 'shipping', shipping)
@@ -575,6 +610,7 @@ function SoldForm({ children, data }: props) {
                   label="What have you sold?"
                   color="white"
                   crossOrigin={undefined}
+                  value={boughtId ? boughtData?.item : undefined}
                 ></Input>
                 <Input
                   className="focus:ring-0 block w-half p-4 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-md focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"

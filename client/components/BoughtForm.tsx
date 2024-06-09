@@ -7,9 +7,18 @@ import { notify } from '../functions/functions'
 
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
-import { Input } from '@material-tailwind/react'
+import {
+  Card,
+  Input,
+  List,
+  ListItem,
+  ListItemPrefix,
+  Radio,
+  Typography,
+} from '@material-tailwind/react'
 import { editedItem, item } from '../models/items'
 import LedgerFooter from './LedgerFooter'
+import { useState } from 'react'
 
 interface props {
   data?: item
@@ -17,6 +26,12 @@ interface props {
 }
 
 function BoughtForm({ children, data }: props) {
+  const [addToInventory, setAddToInventory] = useState(true)
+
+  function inventoryHandler(boolean: boolean) {
+    setAddToInventory(boolean)
+  }
+
   const id = data?.id
 
   console.log('data for boughtform', data)
@@ -26,18 +41,20 @@ function BoughtForm({ children, data }: props) {
     const target = event.currentTarget
     const form = new FormData(target)
     const item = form.get('itembought')?.valueOf() as string
+    const inventory = form.get('inventoryOption')?.valueOf() as string
     const price = form.get('howmuch')?.valueOf() as number
     const shipping = form.get('shipping')?.valueOf() as number
     const potentialSalePrice = form.get('potential-value')?.valueOf() as number
     const soldOrBought = 'bought'
     // const inStock = form.get('inStock')?.valueOf() as number
-
+    console.log('inventory form', inventory)
     const completedBoughtForm = {
       item,
       price,
       soldOrBought,
       shipping,
       potentialSalePrice,
+      inventory,
     }
 
     const editedForm = {
@@ -71,7 +88,10 @@ function BoughtForm({ children, data }: props) {
       //   shipping: number
       //   potentialSalePrice: number
       // }
-    ) => postFormData(completedBoughtForm),
+    ) =>
+      postFormData(completedBoughtForm).then((test) =>
+        console.log('testtttt', test),
+      ),
     onSuccess: () => {
       queryClient.invalidateQueries(['items'])
     },
@@ -224,6 +244,80 @@ function BoughtForm({ children, data }: props) {
                   crossOrigin={undefined}
                 ></Input>
               </div>
+              {/* radio button test */}
+              <div className="mt-4  flex flex-col  justify-centerw-full">
+                <p className="text-white mb-4">Add to inventory?</p>
+                <Card className="w-full max-w-[24rem] bg-transparent shadow-lg">
+                  <List className="flex-row">
+                    <ListItem className="p-0">
+                      <label
+                        htmlFor="yesInventory"
+                        className={
+                          addToInventory
+                            ? 'bg-[#76ABAE] flex w-full cursor-pointer items-center px-3 py-2'
+                            : 'flex w-full cursor-pointer items-center px-3 py-2'
+                        }
+                      >
+                        <ListItemPrefix className="mr-3">
+                          <Radio
+                            // onChange={handleShippingChange}
+                            defaultChecked={addToInventory}
+                            onChange={() => inventoryHandler(true)}
+                            value={1}
+                            name="inventoryOption"
+                            id="yesInventory"
+                            ripple={false}
+                            className="hover:before:opacity-0"
+                            containerProps={{
+                              className: 'p-0 bg-transparent',
+                            }}
+                            crossOrigin={undefined}
+                          />
+                        </ListItemPrefix>
+                        <Typography
+                          color="blue-gray"
+                          className="font-medium text-white w-full text-center"
+                        >
+                          Yes
+                        </Typography>
+                      </label>
+                    </ListItem>
+                    <ListItem className="p-0">
+                      <label
+                        htmlFor="noInventory"
+                        className={
+                          !addToInventory
+                            ? 'bg-[#76ABAE] flex w-full cursor-pointer items-center px-3 py-2'
+                            : 'flex w-full cursor-pointer items-center px-3 py-2'
+                        }
+                      >
+                        <ListItemPrefix className="mr-3">
+                          <Radio
+                            onChange={() => inventoryHandler(false)}
+                            defaultChecked={!addToInventory}
+                            value={0}
+                            name="inventoryOption"
+                            id="noInventory"
+                            ripple={false}
+                            className="hover:before:opacity-0"
+                            containerProps={{
+                              className: 'p-0',
+                            }}
+                            crossOrigin={undefined}
+                          />
+                        </ListItemPrefix>
+                        <Typography
+                          color="blue-gray"
+                          className="font-medium text-white w-full text-center"
+                        >
+                          No
+                        </Typography>
+                      </label>
+                    </ListItem>
+                  </List>
+                </Card>
+              </div>
+              {/* radio button test */}
               <div className="flex flex-row gap-2 justify-between">
                 <button className="relative group-hover:opacity-100 ml-1 mt-5 text-[#eee] hover:text-white border border-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:hover:bg-red-600 dark:focus:ring-red-900">
                   Submit

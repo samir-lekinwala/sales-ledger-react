@@ -1,7 +1,11 @@
 import { useEffect, useState } from 'react'
 import * as models from '../models/items'
 
-import { calculateFeesTotal } from '../functions/functions.tsx'
+import {
+  calculateFeesTotal,
+  numberOfItemsInInventory,
+} from '../functions/functions.tsx'
+import { Chip } from '@material-tailwind/react'
 
 interface Props {
   data: models.item[]
@@ -49,7 +53,7 @@ function LedgerFooter(props: Props) {
     let totalValueOfInventory = 0
 
     for (let i = 0; i < data.length; i++) {
-      if (data[i].soldOrBought === 'bought') {
+      if (data[i].soldOrBought === 'bought' && data[i].inventory == true) {
         totalValueOfInventory += data[i].potentialSalePrice
       }
     }
@@ -84,8 +88,19 @@ function LedgerFooter(props: Props) {
                   Total number of transactions made
                 </div>
               </th>
-              <th scope="col" className="px-2 py-3">
+              <th
+                scope="col"
+                className="has-tooltip px-2 py-3"
+                data-tooltip-target="inventory-total"
+              >
                 Inventory
+                <div
+                  data-tooltip="inventory-total"
+                  data-tooltip-placement="top"
+                  className="normal-case tooltip absolute z-50 whitespace-normal break-words rounded-lg bg-black py-1.5 px-3 font-sans text-sm font-normal text-white focus:outline-none"
+                >
+                  {`${numberOfItemsInInventory(data)} items in your Inventory`}
+                </div>
               </th>
               <th data-tooltip-target="total-sold" className="has-tooltip">
                 Sold

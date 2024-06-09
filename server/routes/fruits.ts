@@ -43,9 +43,9 @@ router.post('/', async (req, res) => {
   try {
     const dataCheck = await req.body
     console.log(dataCheck)
-    await db.addItem(dataCheck)
-
-    res.sendStatus(201)
+    const response = await db.addItem(dataCheck)
+    res.json(response)
+    // res.sendStatus(201)
   } catch (error) {
     console.log(error)
     res.status(500).json({ message: 'Something went wrong' })

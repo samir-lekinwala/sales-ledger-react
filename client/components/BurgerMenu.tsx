@@ -17,6 +17,10 @@ import { Link, useLocation } from 'react-router-dom'
 import * as models from '../models/items.tsx'
 import Footer from './Footer.tsx'
 import Logo from './Logo.tsx'
+import {
+  numberOfItemsInInventory,
+  numberOfItemsInLedger,
+} from '../functions/functions.tsx'
 
 interface Props {
   data: models.item[]
@@ -27,17 +31,18 @@ export function BurgerMenu(props: Props) {
   const { pathname } = location
 
   function checkPath() {
+    console.log('pathname', pathname)
     if (pathname == '/theledger') {
       setCurrentPath('ledger')
     } else if (pathname == '/inventory') {
       setCurrentPath('inventory')
-    }
+    } else setCurrentPath(undefined)
   }
   useEffect(() => {
     checkPath()
-  }, [location])
+  }, [pathname])
 
-  const [currentPath, setCurrentPath] = useState()
+  const [currentPath, setCurrentPath] = useState<string | null>()
   console.log(currentPath)
   const data = props.data
 
@@ -45,12 +50,12 @@ export function BurgerMenu(props: Props) {
   // const [openAlert, setOpenAlert] = React.useState(true)
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
 
-  function numberOfItemsInInventory() {
-    return data.filter((item) => item.soldOrBought == 'bought').length
-  }
-  function numberOfItemsInLedger() {
-    return data.length
-  }
+  // function numberOfItemsInInventory(data) {
+  //   return data.filter((item) => item.inventory == true).length
+  // }
+  // function numberOfItemsInLedger(data) {
+  //   return data.length
+  // }
 
   const customTheme = {
     ...{
@@ -139,7 +144,7 @@ export function BurgerMenu(props: Props) {
                 </Link>
                 <ListItemSuffix>
                   <Chip
-                    value={numberOfItemsInInventory()}
+                    value={numberOfItemsInInventory(data)}
                     size="sm"
                     variant="ghost"
                     color="blue-gray"
@@ -160,7 +165,7 @@ export function BurgerMenu(props: Props) {
                 </Link>
                 <ListItemSuffix>
                   <Chip
-                    value={numberOfItemsInLedger()}
+                    value={numberOfItemsInLedger(data)}
                     size="sm"
                     variant="ghost"
                     color="blue-gray"

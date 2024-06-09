@@ -45,3 +45,10 @@ export function calculateIfItemSold(item: models.item) {
 export function notify(type: string, text: string) {
   return toast[type](text)
 }
+
+export function numberOfItemsInInventory(data: models.item[]) {
+  return data.filter((item: models.item) => item.inventory == true).length
+}
+export function numberOfItemsInLedger(data: models.item[]) {
+  return data.length
+}

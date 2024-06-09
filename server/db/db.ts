@@ -8,7 +8,10 @@ export async function getItem(id: number) {
   return db('items').where('id', id).select()
 }
 export async function addItem(data) {
-  return db('items').insert(data)
+  return db('items')
+    .insert(data)
+    .returning('id')
+    .then((id) => id[0].id)
 }
 export async function deleteItem(id: number) {
   return db('items').where('id', id).del()

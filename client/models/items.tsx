@@ -9,6 +9,8 @@ export interface item {
   soldOrBought: string
   created_at: number
   potentialSalePrice: number
+  inventory: boolean
+  bought_Id: number
 }
 export interface editedItem {
   id?: number
@@ -21,4 +23,6 @@ export interface editedItem {
   soldOrBought?: string
   created_at?: number
   potentialSalePrice?: number
+  inventory?: boolean
+  bought_Id?: number
 }

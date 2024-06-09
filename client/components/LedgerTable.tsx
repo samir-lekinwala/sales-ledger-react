@@ -69,7 +69,7 @@ function LedgerTable(props: Props) {
   // }
   function addItemsToTable(item: models.item) {
     const feeDollarOrPercent = dollarOrPercent(item)
-    console.log(feeDollarOrPercent, item.item)
+    // console.log(feeDollarOrPercent, item.item)
     calculateFeesTotal(item)
     const fee = (item.price - calculateFeesTotal(item) - item.shipping).toFixed(
       2,

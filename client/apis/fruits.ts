@@ -4,7 +4,10 @@ import * as models from '../models/items.tsx'
 const rootUrl = '/api/v1'
 
 export async function postFormData(data: models.item) {
-  return request.post(rootUrl + '/bought').send(data)
+  return request
+    .post(rootUrl + '/bought')
+    .send(data)
+    .then((test) => JSON.parse(test.text))
 }
 export async function patchFormData(data: models.editedItem) {
   console.log('data from fruits', data)

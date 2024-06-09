@@ -8,6 +8,7 @@ export async function seed(knex) {
       shipping: 15,
       platform: 'trademe',
       soldOrBought: 'bought',
+      inventory: true,
     },
     {
       item: 'RTX 3080',
@@ -15,6 +16,7 @@ export async function seed(knex) {
       shipping: 0,
       platform: 'trademe',
       soldOrBought: 'bought',
+      inventory: true,
     },
     {
       item: 'BBQ',
@@ -22,6 +24,7 @@ export async function seed(knex) {
       shipping: 0,
       platform: 'facebook',
       soldOrBought: 'sold',
+      inventory: false,
     },
     {
       item: 'RTX 3080',
@@ -29,6 +32,8 @@ export async function seed(knex) {
       shipping: 0,
       platform: 'trademe',
       soldOrBought: 'sold',
+      inventory: false,
+      bought_id: 2,
     },
     {
       item: 'S22',
@@ -37,6 +42,7 @@ export async function seed(knex) {
       platform: 'trademe',
       soldOrBought: 'bought',
       potentialSalePrice: 600,
+      inventory: true,
     },
   ])
 }

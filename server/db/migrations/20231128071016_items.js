@@ -11,6 +11,8 @@ export async function up(knex) {
     table.string('soldOrBought')
     table.integer('potentialSalePrice').defaultTo(0)
     table.timestamp('created_at').defaultTo(knex.fn.now())
+    table.boolean('inventory').notNullable().defaultTo(0)
+    table.integer('bought_Id').unique()
   })
 }
 
