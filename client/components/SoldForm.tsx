@@ -6,7 +6,7 @@ import {
 } from '@tanstack/react-query'
 import React, { useEffect, useState } from 'react'
 import { getItem, patchFormData, postFormData } from '../apis/fruits'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import { ToastContainer } from 'react-toastify'
 import { notify } from '../functions/functions'
 import { Input, Option, Select } from '@material-tailwind/react'
@@ -42,6 +42,8 @@ interface props {
 }
 
 function SoldForm({ children, data }: props) {
+  const navigate = useNavigate()
+
   const { boughtId } = useParams()
 
   let testingData: number
@@ -345,8 +347,9 @@ function SoldForm({ children, data }: props) {
         bought_Id: Number(boughtId),
       }
       console.log(boughtToSoldForm)
-      mutateAddSoldTransaction.mutate(boughtToSoldForm)
       mutateEditBoughtTransaction.mutate({ id: Number(boughtId), inventory: 0 })
+      mutateAddSoldTransaction.mutate(boughtToSoldForm)
+      navigate('/inventory')
       target.reset()
     } else {
       mutateAddSoldTransaction.mutate(completedSoldForm)
@@ -368,7 +371,14 @@ function SoldForm({ children, data }: props) {
       //   fee: number
       // }
     ) => postFormData(completedBoughtForm),
-    onSuccess: () => {
+    onSuccess: (e) => {
+      if (boughtId) {
+        mutateEditBoughtTransaction.mutate({
+          id: Number(boughtId),
+          bought_Id: Number(e),
+        })
+        console.log('console logging e', e)
+      }
       setAdditionalInputVisible(false)
       setShippingInputVisible(false)
       setSelectedOption('nofee')

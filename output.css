@@ -972,6 +972,10 @@ select{
   top: calc(80vh - 250px);
 }
 
+.left-10{
+  left: 2.5rem;
+}
+
 .z-10{
   z-index: 10;
 }
@@ -3447,8 +3451,48 @@ select{
   color: rgb(245 127 23 / var(--tw-text-opacity));
 }
 
+.text-\[\#54ff2e\]{
+  --tw-text-opacity: 1;
+  color: rgb(84 255 46 / var(--tw-text-opacity));
+}
+
+.text-\[\#c02929\]{
+  --tw-text-opacity: 1;
+  color: rgb(192 41 41 / var(--tw-text-opacity));
+}
+
+.text-deep-orange-400{
+  --tw-text-opacity: 1;
+  color: rgb(255 112 67 / var(--tw-text-opacity));
+}
+
+.text-yellow-300{
+  --tw-text-opacity: 1;
+  color: rgb(255 241 118 / var(--tw-text-opacity));
+}
+
+.text-\[\#eeeee\]{
+  color: #eeeee;
+}
+
 .underline{
   text-decoration-line: underline;
+}
+
+.decoration-\[\#46ff3f\]{
+  text-decoration-color: #46ff3f;
+}
+
+.decoration-\[\#ff2c2c\]{
+  text-decoration-color: #ff2c2c;
+}
+
+.decoration-\[\#09ff00\]{
+  text-decoration-color: #09ff00;
+}
+
+.decoration-\[\#76ABAE\]{
+  text-decoration-color: #76ABAE;
 }
 
 .antialiased{
@@ -4933,6 +4977,11 @@ table {
 
 .hover\:bg-yellow-500\/10:hover{
   background-color: rgb(255 235 59 / 0.1);
+}
+
+.hover\:bg-\[\#6dbdff\]:hover{
+  --tw-bg-opacity: 1;
+  background-color: rgb(109 189 255 / var(--tw-bg-opacity));
 }
 
 .hover\:bg-opacity-80:hover{

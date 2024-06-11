@@ -18,7 +18,7 @@ interface Props {
 }
 
 export default function InventoryTable(props: Props) {
-  const { data } = props
+  const { data, page } = props
 
   const [itemOptions, setItemOptions] = useState<number | null>()
   const [optionsVisible, setOptionsVisible] = useState<boolean | null>()
@@ -28,27 +28,29 @@ export default function InventoryTable(props: Props) {
   const [storedData, setStoredData] = useState(boughtItemsFilter())
   const [sortedOrder, setSortedOrder] = useState(false)
   const [tableHeaders, setTableHeaders] = useState(tableHeadersBasedOnPage())
+  const [boughtIdArray, setBoughtIdArray] = useState(getBoughtIdArray())
 
-  // function updatingRawData() {
-  //   try {
-  //     setRawData(props.data)
-  //     console.log('test56', rawData)
-  //     return props.data
-  //   } catch (error) {
-  //     console.log(error)
-  //   }
+  function getBoughtIdArray() {
+    const result = []
+    for (let i = 0; i < props.data.length; i++) {
+      if (props.data[i].bought_Id) {
+        result.push(props.data[i].bought_Id)
+      }
+    }
+    return result
+  }
 
-  //   // console.log('from update func', props.data)
-  //   // // setRawData(props.data)
-  //   // setRawData(props.data)
-  //   // console.log('raw test555', rawData)
-  //   // return props.data
-  //   // console.log('raw after func', rawData)
-  // }
+  function boughtIdMatchesItemId(id) {
+    const boughtIdSet = new Set(boughtIdArray)
+    console.log(boughtIdSet.has(id), id)
+    return boughtIdSet.has(id)
+  }
 
   useEffect(() => {
     // const filtered = boughtItemsFilter()
     setStoredData(boughtItemsFilter())
+    getBoughtIdArray()
+    console.log('boughtidarray', boughtIdArray)
     // updatingRawData()
     // setRawData(props.data)
     // boughtItemsFilter(props.data)
@@ -60,6 +62,18 @@ export default function InventoryTable(props: Props) {
   // useEffect(() => {
   //   addNetPriceToData()
   // }, [])
+
+  //   function addSalesIdtoCompleted(data: models.item[]) {
+  //     const newData = []
+  // for(let i= 0; i < data.length; i++) {
+  // if(data[i].bought_Id) {
+  // data[]
+
+  // }
+
+  // }
+
+  //   }
 
   function addNetPriceToData(data: models.item[]) {
     const newData = []
@@ -73,7 +87,7 @@ export default function InventoryTable(props: Props) {
   }
 
   function boughtItemsFilter() {
-    if (props.page == 'inventory') {
+    if (page == 'inventory') {
       const filterResult = props.data
         // .reverse()
         .filter((x) => x.inventory == true)
@@ -81,13 +95,13 @@ export default function InventoryTable(props: Props) {
       const result = addNetPriceToData(filterResult)
       return result
     } else {
-      console.log('the else statement')
       return addNetPriceToData(props.data)
     }
   }
 
   function tableHeadersBasedOnPage() {
-    if (props.page == 'inventory') {
+    if (page == 'inventory') {
+      console.log('props inventory page')
       return [
         'Item',
         'Date',
@@ -96,9 +110,10 @@ export default function InventoryTable(props: Props) {
         'Net price',
         // 'Price after Fees/Shipping',
         'Value',
-        'Platform',
+        // 'Platform',
       ]
-    } else if (props.page == 'ledger') {
+    } else if (page == 'ledger') {
+      console.log('props ledger page')
       return [
         'Item',
         'Date',
@@ -181,7 +196,7 @@ export default function InventoryTable(props: Props) {
     ['Shipping', 'shipping'],
     ['Net price', 'netprice'],
     ['Value', 'potentialSalePrice'],
-    ['Platform', 'platform'],
+    // ['Platform', 'platform'],
   ])
 
   function sortData(column) {
@@ -221,7 +236,6 @@ export default function InventoryTable(props: Props) {
     const fee = (item.price - calculateFeesTotal(item) - item.shipping).toFixed(
       2,
     )
-    console.log(singleFee, fee)
 
     return (
       <tr
@@ -235,8 +249,13 @@ export default function InventoryTable(props: Props) {
         onClick={() => rowOnClick(item.id)}
       >
         <th
+          id={`row-${item.id}`}
           scope="row"
-          className="font-medium text-[#EEEEEE] text-left relative left-2"
+          className={
+            boughtIdMatchesItemId(item.id) == true || item.bought_Id
+              ? 'font-medium underline decoration-[#76ABAE] text-left relative left-2'
+              : 'font-medium text-[#EEEEEE] text-left relative left-2'
+          }
           onClick={() => handleItemOptions(item.id)}
         >
           <InventoryMenu item={item} />
@@ -244,21 +263,30 @@ export default function InventoryTable(props: Props) {
         <td className="px-3">{moment(item.created_at).format('lll')}</td>
         <td className="px-1">${item.price}</td>
         <td className="px-3">${item.shipping}</td>
+
         {/* need to make below into fee */}
         {/* net price */}
-        {item.soldOrBought === 'sold' ? (
-          <td className="px-3 text-white">
-            $
-            {
-              fee
-              // item.price - item.shipping - fee
-            }
-          </td>
-        ) : (
-          <td>$0</td>
-        )}
+        {
+          page == 'ledger' && item.soldOrBought === 'sold' ? (
+            <td className=" text-white">
+              $
+              {
+                fee
+                // item.price - item.shipping - fee
+              }
+            </td>
+          ) : page == 'ledger' && item.soldOrBought === 'bought' ? (
+            <td>$0</td>
+          ) : null
+          // <td>$0</td>
+        }
 
-        <td className="px-3 font-bold">${item.netprice}</td>
+        <td className="px-3 font-bold">
+          $
+          {page == 'ledger' && item.soldOrBought == 'sold'
+            ? Number(item.netprice) - fee
+            : item.netprice}
+        </td>
         {/* )} */}
 
         {editItemId === item.id ? (
@@ -278,12 +306,14 @@ export default function InventoryTable(props: Props) {
               </button>
             </form>
           </div>
-        ) : (
+        ) : item.soldOrBought == 'bought' ? (
           <td key={item.id} onDoubleClick={() => handleDoubleClick(item.id)}>
             ${item.potentialSalePrice}
           </td>
+        ) : (
+          <td></td>
         )}
-        <td className="px-3">{item.platform}</td>
+        {page == 'ledger' ? <td className="px-3">{item.platform}</td> : null}
         {props.page == 'ledger' ? (
           item.soldOrBought === 'bought' ? (
             <td className="px-3 text-white">Bought</td>

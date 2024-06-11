@@ -52,3 +52,10 @@ export function numberOfItemsInInventory(data: models.item[]) {
 export function numberOfItemsInLedger(data: models.item[]) {
   return data.length
 }
+
+export function arrayOfCompletedTrades(data: models.item[]) {
+  return data.filter(
+    (item) =>
+      item.bought_Id || (item.soldOrBought == 'sold' && !item.bought_Id),
+  )
+}

@@ -173,6 +173,27 @@ export function BurgerMenu(props: Props) {
                   />
                 </ListItemSuffix>
               </ListItem>
+              <ListItem
+                className={`${
+                  currentPath == 'completed' ? 'bg-[#76ABAE] text-black' : null
+                }`}
+              >
+                <ListItemPrefix>
+                  <InboxIcon className="h-5 w-5" />
+                </ListItemPrefix>
+                <Link to="/completed" onClick={closeDrawer}>
+                  Completed
+                </Link>
+                <ListItemSuffix>
+                  <Chip
+                    value={numberOfItemsInLedger(data)}
+                    size="sm"
+                    variant="ghost"
+                    color="blue-gray"
+                    className="rounded-full"
+                  />
+                </ListItemSuffix>
+              </ListItem>
               {/* <ListItem>
                 <ListItemPrefix>
                   <UserCircleIcon className="h-5 w-5" />
