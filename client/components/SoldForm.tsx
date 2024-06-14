@@ -383,6 +383,7 @@ function SoldForm({ children, data }: props) {
       setShippingInputVisible(false)
       setSelectedOption('nofee')
       queryClient.invalidateQueries(['items'])
+      queryClient.invalidateQueries(['item'])
       notify('success', `${soldItem} has been added to the ledger`)
     },
   })
@@ -403,6 +404,7 @@ function SoldForm({ children, data }: props) {
     onSuccess: () => {
       notify('success', `${data?.item} has been updated`)
       queryClient.invalidateQueries(['item'])
+      queryClient.invalidateQueries(['items'])
     },
   })
 

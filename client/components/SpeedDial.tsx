@@ -46,7 +46,7 @@ export function SpeedDialPlacement() {
 
                 <div
                   color="blue-gray"
-                  className="text-xs font-poppins underline relative bottom-1"
+                  className="text-xs font-poppins underline decoration-[#76ABAE] relative bottom-1"
                 >
                   Bought
                 </div>
@@ -70,14 +70,14 @@ export function SpeedDialPlacement() {
                 </svg>
 
                 {/* <CogIcon className="h-5 w-5" /> */}
-                <div className=" text-center text-xs font-poppins underline relative bottom-1">
+                <div className=" text-center text-xs font-poppins underline decoration-[#76ABAE] relative bottom-1">
                   Sold
                 </div>
               </SpeedDialAction>
             </Link>
-            <SpeedDialAction>
+            {/* <SpeedDialAction>
               <Square3Stack3DIcon className="h-5 w-5" />
-            </SpeedDialAction>
+            </SpeedDialAction> */}
           </SpeedDialContent>
         </SpeedDial>
       </div>

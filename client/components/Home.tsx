@@ -6,7 +6,7 @@ function Home() {
   return (
     <>
       <Jumbotron />
-      <HorizontalCard />
+      {/* <HorizontalCard /> */}
       <Footer colour="white" />
     </>
   )

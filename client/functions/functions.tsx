@@ -59,3 +59,42 @@ export function arrayOfCompletedTrades(data: models.item[]) {
       item.bought_Id || (item.soldOrBought == 'sold' && !item.bought_Id),
   )
 }
+
+export function addNetPriceToData(data: models.item[]) {
+  const newData = []
+  for (let i = 0; i < data.length; i++) {
+    newData.push({
+      ...data[i],
+      netprice: data[i].shipping + data[i].price,
+    })
+  }
+  return newData
+}
+
+export function combineData(data: models.item[]) {
+  const newData = []
+  for (let i = 0; i < data.length; i++) {
+    const returnedData = combineBoughtAndSoldToOne(data[i], data)
+    if (returnedData) {
+      newData.push(returnedData)
+    }
+  }
+  return newData
+}
+
+export function combineBoughtAndSoldToOne(
+  item: models.item,
+  data: models.item[],
+) {
+  for (let i = 0; i < data.length; i++) {
+    if (item.soldOrBought === 'bought') {
+      return
+    } else if (data[i].bought_Id == item.id && item.soldOrBought == 'sold') {
+      return { ...item, boughtItem: data[i] }
+    } else if (item.soldOrBought === 'sold' && !item.bought_Id) {
+      return { ...item, boughtItem: null }
+    }
+  }
+
+  return
+}

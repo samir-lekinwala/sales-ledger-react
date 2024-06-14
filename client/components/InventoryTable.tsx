@@ -3,14 +3,12 @@ import * as models from '../models/items.tsx'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { deleteItem, patchFormData } from '../apis/fruits'
 import moment from 'moment'
-import { Link } from 'react-router-dom'
-import { Card, List, ListItem } from '@material-tailwind/react'
 import { useOutsideClick } from '../hooks/useOutsideClick.ts'
 import InventoryMenu from './InventoryMenu.tsx'
-import { calculateFeesTotal } from '../functions/functions.tsx'
-import { Float } from '@headlessui-float/react'
-import { Button, Menu, MenuItems } from '@headlessui/react'
-import MenuComponent from './MenuComponent.tsx'
+import {
+  addNetPriceToData,
+  calculateFeesTotal,
+} from '../functions/functions.tsx'
 
 interface Props {
   data: models.item[]
@@ -42,7 +40,7 @@ export default function InventoryTable(props: Props) {
 
   function boughtIdMatchesItemId(id) {
     const boughtIdSet = new Set(boughtIdArray)
-    console.log(boughtIdSet.has(id), id)
+    // console.log(boughtIdSet.has(id), id)
     return boughtIdSet.has(id)
   }
 
@@ -51,40 +49,9 @@ export default function InventoryTable(props: Props) {
     setStoredData(boughtItemsFilter())
     getBoughtIdArray()
     console.log('boughtidarray', boughtIdArray)
-    // updatingRawData()
-    // setRawData(props.data)
-    // boughtItemsFilter(props.data)
-    // console.log('raw from effect', rawData)
 
     // addNetPriceToData()
   }, [props.data])
-
-  // useEffect(() => {
-  //   addNetPriceToData()
-  // }, [])
-
-  //   function addSalesIdtoCompleted(data: models.item[]) {
-  //     const newData = []
-  // for(let i= 0; i < data.length; i++) {
-  // if(data[i].bought_Id) {
-  // data[]
-
-  // }
-
-  // }
-
-  //   }
-
-  function addNetPriceToData(data: models.item[]) {
-    const newData = []
-    for (let i = 0; i < data.length; i++) {
-      newData.push({
-        ...data[i],
-        netprice: data[i].shipping + data[i].price,
-      })
-    }
-    return newData
-  }
 
   function boughtItemsFilter() {
     if (page == 'inventory') {
@@ -125,6 +92,9 @@ export default function InventoryTable(props: Props) {
         'Platform',
         'Sold / Bought',
       ]
+    } else if (page == 'completed') {
+      console.log('props completed page')
+      return ['Item', 'Date sold', 'Bought Price', 'Sold Price', 'Profit']
     }
   }
 
@@ -236,7 +206,10 @@ export default function InventoryTable(props: Props) {
     const fee = (item.price - calculateFeesTotal(item) - item.shipping).toFixed(
       2,
     )
-
+    if (!item.boughtItem) {
+      item.boughtItem = { netprice: 0 }
+    }
+    // console.log('fee', singleFee, fee)
     return (
       <tr
         key={item.id}
@@ -261,66 +234,85 @@ export default function InventoryTable(props: Props) {
           <InventoryMenu item={item} />
         </th>
         <td className="px-3">{moment(item.created_at).format('lll')}</td>
-        <td className="px-1">${item.price}</td>
-        <td className="px-3">${item.shipping}</td>
 
-        {/* need to make below into fee */}
-        {/* net price */}
-        {
-          page == 'ledger' && item.soldOrBought === 'sold' ? (
-            <td className=" text-white">
-              $
-              {
-                fee
-                // item.price - item.shipping - fee
-              }
+        {/* For completed page */}
+        {page === 'completed' ? (
+          // bought price
+          <>
+            <td className="px-1">${item.boughtItem?.netprice.toFixed(2)}</td>
+
+            <td className="px-1">${singleFee}</td>
+            <td className="px-1">
+              ${(singleFee - item.boughtItem?.netprice).toFixed(2)}
             </td>
-          ) : page == 'ledger' && item.soldOrBought === 'bought' ? (
-            <td>$0</td>
-          ) : null
-          // <td>$0</td>
-        }
-
-        <td className="px-3 font-bold">
-          $
-          {page == 'ledger' && item.soldOrBought == 'sold'
-            ? Number(item.netprice) - fee
-            : item.netprice}
-        </td>
-        {/* )} */}
-
-        {editItemId === item.id ? (
-          <div className="py-5 relative">
-            <form onSubmit={(e) => handleSubmit(e, item.id)}>
-              <label htmlFor="potentialValue">
-                {' '}
-                <input
-                  id="potentialValue"
-                  name="potentialValue"
-                  className="text-black w-20"
-                  defaultValue={item.potentialSalePrice}
-                ></input>
-              </label>
-              <button className="px-3">
-                <span>&#10003;</span>
-              </button>
-            </form>
-          </div>
-        ) : item.soldOrBought == 'bought' ? (
-          <td key={item.id} onDoubleClick={() => handleDoubleClick(item.id)}>
-            ${item.potentialSalePrice}
-          </td>
+          </>
         ) : (
-          <td></td>
+          <>
+            {' '}
+            <td className="px-1">${item.price}</td>
+            <td className="px-3">${item.shipping}</td>
+            {/* need to make below into fee */}
+            {/* net price */}
+            {
+              page == 'ledger' && item.soldOrBought === 'sold' ? (
+                <td className=" text-white">
+                  $
+                  {
+                    fee
+                    // item.price - item.shipping - fee
+                  }
+                </td>
+              ) : page == 'ledger' && item.soldOrBought === 'bought' ? (
+                <td>$0</td>
+              ) : null
+              // <td>$0</td>
+            }
+            <td className="px-3 font-bold">
+              $
+              {page == 'ledger' && item.soldOrBought == 'sold'
+                ? Number(item.netprice) - fee
+                : item.netprice}
+            </td>
+            {/* )} */}
+            {editItemId === item.id ? (
+              <div className="py-5 relative">
+                <form onSubmit={(e) => handleSubmit(e, item.id)}>
+                  <label htmlFor="potentialValue">
+                    {' '}
+                    <input
+                      id="potentialValue"
+                      name="potentialValue"
+                      className="text-black w-20"
+                      defaultValue={item.potentialSalePrice}
+                    ></input>
+                  </label>
+                  <button className="px-3">
+                    <span>&#10003;</span>
+                  </button>
+                </form>
+              </div>
+            ) : item.soldOrBought == 'bought' ? (
+              <td
+                key={item.id}
+                onDoubleClick={() => handleDoubleClick(item.id)}
+              >
+                ${item.potentialSalePrice}
+              </td>
+            ) : (
+              <td></td>
+            )}
+            {page == 'ledger' ? (
+              <td className="px-3">{item.platform}</td>
+            ) : null}
+            {props.page == 'ledger' ? (
+              item.soldOrBought === 'bought' ? (
+                <td className="px-3 text-white">Bought</td>
+              ) : (
+                <td className="px-3 text-rose-600">Sold</td>
+              )
+            ) : null}
+          </>
         )}
-        {page == 'ledger' ? <td className="px-3">{item.platform}</td> : null}
-        {props.page == 'ledger' ? (
-          item.soldOrBought === 'bought' ? (
-            <td className="px-3 text-white">Bought</td>
-          ) : (
-            <td className="px-3 text-rose-600">Sold</td>
-          )
-        ) : null}
       </tr>
     )
   }

@@ -30,9 +30,9 @@ function InventoryMenu(props: props) {
         <th className="font-medium text-[#EEEEEE] text-left">{item.item}</th>
       </MenuHandler>
       <MenuList>
-        <MenuItem>
-          <Link to={`/edit/${item.soldOrBought}/${item.id}`}>Edit</Link>
-        </MenuItem>
+        <Link to={`/edit/${item.soldOrBought}/${item.id}`}>
+          <MenuItem>Edit</MenuItem>
+        </Link>
         {item.soldOrBought == 'bought' && !item.bought_Id ? (
           <MenuItem>
             <Link to={`/sold/${item.id}`}>Sold</Link>

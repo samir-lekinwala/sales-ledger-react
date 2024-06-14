@@ -16,8 +16,8 @@ import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
 import { Link, useLocation } from 'react-router-dom'
 import * as models from '../models/items.tsx'
 import Footer from './Footer.tsx'
-import Logo from './Logo.tsx'
 import {
+  combineData,
   numberOfItemsInInventory,
   numberOfItemsInLedger,
 } from '../functions/functions.tsx'
@@ -36,6 +36,8 @@ export function BurgerMenu(props: Props) {
       setCurrentPath('ledger')
     } else if (pathname == '/inventory') {
       setCurrentPath('inventory')
+    } else if (pathname == '/completed') {
+      setCurrentPath('completed')
     } else setCurrentPath(undefined)
   }
   useEffect(() => {
@@ -46,16 +48,9 @@ export function BurgerMenu(props: Props) {
   console.log(currentPath)
   const data = props.data
 
-  // const [open, setOpen] = React.useState(0)
-  // const [openAlert, setOpenAlert] = React.useState(true)
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
 
-  // function numberOfItemsInInventory(data) {
-  //   return data.filter((item) => item.inventory == true).length
-  // }
-  // function numberOfItemsInLedger(data) {
-  //   return data.length
-  // }
+  const numberOfCompleted = combineData(data).length
 
   const customTheme = {
     ...{
@@ -127,91 +122,74 @@ export function BurgerMenu(props: Props) {
           </div> */}
             <List className="text-black">
               <hr className="my-2 border-blue-gray-50" />
-              <ListItem
-                className={`${
-                  currentPath == 'inventory' ? 'bg-[#76ABAE] text-black' : null
-                }`}
-              >
-                <ListItemPrefix>
-                  <InboxIcon className="h-5 w-5" />
-                </ListItemPrefix>
-                <Link
-                  // className="bg-black"
-                  to="/inventory"
-                  onClick={closeDrawer}
+
+              <Link to="/theledger" onClick={closeDrawer}>
+                <ListItem
+                  className={`${
+                    currentPath == 'ledger' ? 'bg-[#76ABAE] text-black' : null
+                  }`}
                 >
-                  Inventory
-                </Link>
-                <ListItemSuffix>
-                  <Chip
-                    value={numberOfItemsInInventory(data)}
-                    size="sm"
-                    variant="ghost"
-                    color="blue-gray"
-                    className="rounded-full"
-                  />
-                </ListItemSuffix>
-              </ListItem>
-              <ListItem
-                className={`${
-                  currentPath == 'ledger' ? 'bg-[#76ABAE] text-black' : null
-                }`}
-              >
-                <ListItemPrefix>
-                  <InboxIcon className="h-5 w-5" />
-                </ListItemPrefix>
-                <Link to="/theledger" onClick={closeDrawer}>
+                  <ListItemPrefix>
+                    <InboxIcon className="h-5 w-5" />
+                  </ListItemPrefix>
                   Ledger
-                </Link>
-                <ListItemSuffix>
-                  <Chip
-                    value={numberOfItemsInLedger(data)}
-                    size="sm"
-                    variant="ghost"
-                    color="blue-gray"
-                    className="rounded-full"
-                  />
-                </ListItemSuffix>
-              </ListItem>
-              <ListItem
-                className={`${
-                  currentPath == 'completed' ? 'bg-[#76ABAE] text-black' : null
-                }`}
-              >
-                <ListItemPrefix>
-                  <InboxIcon className="h-5 w-5" />
-                </ListItemPrefix>
-                <Link to="/completed" onClick={closeDrawer}>
+                  <ListItemSuffix>
+                    <Chip
+                      value={numberOfItemsInLedger(data)}
+                      size="sm"
+                      variant="ghost"
+                      color="blue-gray"
+                      className="rounded-full"
+                    />
+                  </ListItemSuffix>
+                </ListItem>
+              </Link>
+              <Link to="/inventory" onClick={closeDrawer}>
+                <ListItem
+                  className={`${
+                    currentPath == 'inventory'
+                      ? 'bg-[#76ABAE] text-black'
+                      : null
+                  }`}
+                >
+                  <ListItemPrefix>
+                    <InboxIcon className="h-5 w-5" />
+                  </ListItemPrefix>
+                  Inventory
+                  <ListItemSuffix>
+                    <Chip
+                      value={numberOfItemsInInventory(data)}
+                      size="sm"
+                      variant="ghost"
+                      color="blue-gray"
+                      className="rounded-full"
+                    />
+                  </ListItemSuffix>
+                </ListItem>
+              </Link>
+              <Link to="/completed" onClick={closeDrawer}>
+                <ListItem
+                  className={`${
+                    currentPath == 'completed'
+                      ? 'bg-[#76ABAE] text-black'
+                      : null
+                  }`}
+                >
+                  <ListItemPrefix>
+                    <InboxIcon className="h-5 w-5" />
+                  </ListItemPrefix>
                   Completed
-                </Link>
-                <ListItemSuffix>
-                  <Chip
-                    value={numberOfItemsInLedger(data)}
-                    size="sm"
-                    variant="ghost"
-                    color="blue-gray"
-                    className="rounded-full"
-                  />
-                </ListItemSuffix>
-              </ListItem>
-              {/* <ListItem>
-                <ListItemPrefix>
-                  <UserCircleIcon className="h-5 w-5" />
-                </ListItemPrefix>
-                Profile
-              </ListItem>
-              <ListItem>
-                <ListItemPrefix>
-                  <Cog6ToothIcon className="h-5 w-5" />
-                </ListItemPrefix>
-                Settings
-              </ListItem>
-              <ListItem>
-                <ListItemPrefix>
-                  <PowerIcon className="h-5 w-5" />
-                </ListItemPrefix>
-                Log Out
-              </ListItem> */}
+                  <ListItemSuffix>
+                    <Chip
+                      value={numberOfCompleted}
+                      size="sm"
+                      variant="ghost"
+                      color="blue-gray"
+                      className="rounded-full"
+                    />
+                  </ListItemSuffix>
+                </ListItem>
+              </Link>
             </List>
             <div className="relative top-[calc(80vh-250px)]">
               <Footer colour={'black'} />

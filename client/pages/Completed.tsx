@@ -16,7 +16,6 @@ function Completed() {
 
   return (
     <div>
-      hello
       <CompletedTrades data={data.body} />
       <LedgerFooter data={data.body} />
     </div>
