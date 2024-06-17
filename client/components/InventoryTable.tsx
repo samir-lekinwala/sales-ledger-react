@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import * as models from '../models/items.tsx'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { deleteItem, patchFormData } from '../apis/fruits'
+import { deleteItem, patchFormData } from '../apis/api.ts'
 import moment from 'moment'
 import { useOutsideClick } from '../hooks/useOutsideClick.ts'
 import InventoryMenu from './InventoryMenu.tsx'
@@ -153,6 +153,8 @@ export default function InventoryTable(props: Props) {
       tempArray.splice(tempArray.indexOf(itemId), 1)
       setRowHighlighted((rowHighlighted) => [...tempArray])
     } else setRowHighlighted((rowHighlighted) => [...rowHighlighted, itemId])
+
+    console.log('rowhighlighted', rowHighlighted)
   }
 
   function idIncludedInSelected(element) {
@@ -231,7 +233,7 @@ export default function InventoryTable(props: Props) {
           }
           onClick={() => handleItemOptions(item.id)}
         >
-          <InventoryMenu item={item} />
+          <InventoryMenu item={item} selectedArray={rowHighlighted} />
         </th>
         <td className="px-3">{moment(item.created_at).format('lll')}</td>
 

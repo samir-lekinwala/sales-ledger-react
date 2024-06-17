@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useParams, useSearchParams } from 'react-router-dom'
-import { getItem } from '../apis/fruits'
+import { getItem } from '../apis/api'
 import { useQuery } from '@tanstack/react-query'
 import { item } from '../models/items'
 import EditForm from '../components/EditForm'

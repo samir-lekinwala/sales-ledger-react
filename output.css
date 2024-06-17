@@ -1145,6 +1145,18 @@ select{
   margin-top: 1px;
 }
 
+.mt-40{
+  margin-top: 10rem;
+}
+
+.mt-20{
+  margin-top: 5rem;
+}
+
+.mt-16{
+  margin-top: 4rem;
+}
+
 .box-border{
   box-sizing: border-box;
 }
@@ -1423,10 +1435,6 @@ select{
 
 .w-screen{
   width: 100vw;
-}
-
-.w-40{
-  width: 10rem;
 }
 
 .min-w-\[100vw\]{
@@ -2867,11 +2875,6 @@ select{
 .py-6{
   padding-top: 1.5rem;
   padding-bottom: 1.5rem;
-}
-
-.py-20{
-  padding-top: 5rem;
-  padding-bottom: 5rem;
 }
 
 .\!pr-7{

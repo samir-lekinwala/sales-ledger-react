@@ -1,7 +1,7 @@
 // import React from 'react'
 
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { patchFormData, postFormData } from '../apis/fruits'
+import { patchFormData, postFormData } from '../apis/api'
 import { Link } from 'react-router-dom'
 import { notify } from '../functions/functions'
 
@@ -64,15 +64,27 @@ function BoughtForm({ children, data }: props) {
       soldOrBought,
       shipping,
       potentialSalePrice,
+      inventory,
     }
 
     // await postFormData(completedBoughtForm)
     if (data) {
-      notify('success', `${item} has been successfully been edited`)
+      setTimeout(() => {
+        console.log('item from the timeout', item)
+        notify({
+          type: 'success',
+          text: `${item} has been successfully been edited`,
+        })
+      }, 500)
+
       // target.reset()
       mutateEditBoughtTransaction.mutate(editedForm)
     } else {
-      notify('success', `${item} has been successfully added`)
+      setTimeout(() => {
+        console.log('item from the timeout', item)
+        notify({ type: 'success', text: `${item} has been successfully added` })
+      }, 500)
+
       mutateAddBoughtTransaction.mutate(completedBoughtForm)
       target.reset()
     }
@@ -116,8 +128,8 @@ function BoughtForm({ children, data }: props) {
   return (
     <div>
       {data != null ? (
-        <div className="flex flex-col gap-20 justify-center items-center">
-          <ToastContainer position="top-center" />
+        <div className="flex flex-col gap-20 justify-center items-center mt-16">
+          {/* <ToastContainer position="top-center" /> */}
           <form onSubmit={(e) => handleSubmit(e)}>
             <div className="relative flex flex-col bg-clip-border rounded-xl bg-[#31363F] text-white shadow-gray-900/60 shadow-lg sm:w-full sm:p-8 p-4 pb-10">
               <p className="text-center mb-5 text-4xl font-jersey-25 uppercase">
@@ -174,6 +186,78 @@ function BoughtForm({ children, data }: props) {
                   crossOrigin={undefined}
                 ></Input>
               </div>
+              <div className="mt-4  flex flex-col  justify-centerw-full">
+                <p className="text-white mb-4">Add to inventory?</p>
+                <Card className="w-full max-w-[24rem] bg-transparent shadow-lg">
+                  <List className="flex-row">
+                    <ListItem className="p-0">
+                      <label
+                        htmlFor="yesInventory"
+                        className={
+                          addToInventory
+                            ? 'bg-[#76ABAE] flex w-full cursor-pointer items-center px-3 py-2'
+                            : 'flex w-full cursor-pointer items-center px-3 py-2'
+                        }
+                      >
+                        <ListItemPrefix className="mr-3">
+                          <Radio
+                            // onChange={handleShippingChange}
+                            defaultChecked={addToInventory}
+                            onChange={() => inventoryHandler(true)}
+                            value={1}
+                            name="inventoryOption"
+                            id="yesInventory"
+                            ripple={false}
+                            className="hover:before:opacity-0"
+                            containerProps={{
+                              className: 'p-0 bg-transparent',
+                            }}
+                            crossOrigin={undefined}
+                          />
+                        </ListItemPrefix>
+                        <Typography
+                          color="blue-gray"
+                          className="font-medium text-white w-full text-center"
+                        >
+                          Yes
+                        </Typography>
+                      </label>
+                    </ListItem>
+                    <ListItem className="p-0">
+                      <label
+                        htmlFor="noInventory"
+                        className={
+                          !addToInventory
+                            ? 'bg-[#76ABAE] flex w-full cursor-pointer items-center px-3 py-2'
+                            : 'flex w-full cursor-pointer items-center px-3 py-2'
+                        }
+                      >
+                        <ListItemPrefix className="mr-3">
+                          <Radio
+                            onChange={() => inventoryHandler(false)}
+                            defaultChecked={!addToInventory}
+                            value={0}
+                            name="inventoryOption"
+                            id="noInventory"
+                            ripple={false}
+                            className="hover:before:opacity-0"
+                            containerProps={{
+                              className: 'p-0',
+                            }}
+                            crossOrigin={undefined}
+                          />
+                        </ListItemPrefix>
+                        <Typography
+                          color="blue-gray"
+                          className="font-medium text-white w-full text-center"
+                        >
+                          No
+                        </Typography>
+                      </label>
+                    </ListItem>
+                  </List>
+                </Card>
+              </div>
               <div className="flex flex-row justify-between">
                 <button className="relative group-hover:opacity-100 ml-1 mt-5 text-[#eee] hover:text-white border border-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:hover:bg-red-600 dark:focus:ring-red-900">
                   Submit
@@ -189,8 +273,8 @@ function BoughtForm({ children, data }: props) {
           </form>
         </div>
       ) : (
-        <div className="flex flex-col gap-20 justify-center items-center">
-          <ToastContainer position="top-center" />
+        <div className="flex flex-col gap-20 justify-center items-center mt-16">
+          {/* <ToastContainer position="top-center" /> */}
           <form onSubmit={(e) => handleSubmit(e)}>
             <div className="relative flex flex-col bg-clip-border rounded-xl bg-[#31363F] text-white shadow-gray-900/60 shadow-lg max-w-[340px] sm:max-w-full sm:w-full sm:p-8 p-8 pb-10">
               <p className="text-center mb-5 text-4xl font-jersey-25 uppercase">

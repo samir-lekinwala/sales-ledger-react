@@ -1,5 +1,5 @@
 import React from 'react'
-import { getAllItems } from '../apis/fruits'
+import { getAllItems } from '../apis/api'
 import { useQuery } from '@tanstack/react-query'
 import LedgerTable from '../components/LedgerTable'
 import Footer from '../components/LedgerFooter'

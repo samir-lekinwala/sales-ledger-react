@@ -42,8 +42,13 @@ export function calculateIfItemSold(item: models.item) {
   return afterFeesAndShipping
 }
 
-export function notify(type: string, text: string) {
-  return toast[type](text)
+interface toastData {
+  type: string
+  text: string
+}
+
+export function notify(data: toastData) {
+  return toast[data.type](data.text, { delay: 200 })
 }
 
 export function numberOfItemsInInventory(data: models.item[]) {

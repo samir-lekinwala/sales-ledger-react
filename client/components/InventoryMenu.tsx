@@ -2,14 +2,15 @@ import { Menu, MenuHandler, MenuList, MenuItem } from '@material-tailwind/react'
 import { item } from '../models/items'
 import { Link } from 'react-router-dom'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { deleteItem } from '../apis/fruits'
+import { deleteItem } from '../apis/api'
 
 interface props {
   item: item
+  selectedArray: []
 }
 
 function InventoryMenu(props: props) {
-  const { item } = props
+  const { item, selectedArray } = props
 
   const queryClient = useQueryClient()
   const mutateDeleteTransaction = useMutation({
@@ -18,6 +19,15 @@ function InventoryMenu(props: props) {
       queryClient.invalidateQueries(['items'])
     },
   })
+  console.log('selected array', selectedArray)
+
+  function singleItemDeleteOrMultiple(item, array: []) {
+    if (array.length > 0) {
+      for (let i = 0; i < array.length; i++) {
+        mutateDeleteTransaction.mutate(array[i])
+      }
+    } else mutateDeleteTransaction.mutate(item.id)
+  }
 
   return (
     <Menu
@@ -63,7 +73,8 @@ function InventoryMenu(props: props) {
         ) : null}
         <MenuItem
           className="text-[#ff3030] hover:text-[#ffffff] hover:bg-[#ff3030]"
-          onClick={() => mutateDeleteTransaction.mutate(item.id)}
+          onClick={() => singleItemDeleteOrMultiple(item, selectedArray)}
+          // onClick={() => mutateDeleteTransaction.mutate(item.id)}
         >
           Delete
         </MenuItem>

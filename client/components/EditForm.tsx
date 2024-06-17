@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query'
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 
-import { getItem } from '../apis/fruits'
+import { getItem } from '../apis/api'
 
 import { item } from '../models/items'
 import BuyorSell from './BuyorSell'

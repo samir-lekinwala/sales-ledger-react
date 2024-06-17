@@ -2,7 +2,7 @@ import React from 'react'
 import CompletedTrades from '../components/CompletedTrades'
 import LedgerFooter from '../components/LedgerFooter'
 import { useQuery } from '@tanstack/react-query'
-import { getAllItems } from '../apis/fruits'
+import { getAllItems } from '../apis/api'
 
 function Completed() {
   const { data, isLoading, isError, error } = useQuery({

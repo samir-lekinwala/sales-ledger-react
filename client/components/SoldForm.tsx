@@ -5,7 +5,7 @@ import {
   useQueryClient,
 } from '@tanstack/react-query'
 import React, { useEffect, useState } from 'react'
-import { getItem, patchFormData, postFormData } from '../apis/fruits'
+import { getItem, patchFormData, postFormData } from '../apis/api'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { ToastContainer } from 'react-toastify'
 import { notify } from '../functions/functions'
@@ -84,6 +84,7 @@ function SoldForm({ children, data }: props) {
   const [customFeeAmount, setCustomFeeAmount] = useState(0)
   const [id, setId] = useState<number | null>()
   const [soldItem, setSoldItem] = useState()
+  const [notifyText, setNotifyText] = useState()
   // const [tempShipping, setTempShipping] = useState(testingData)
 
   useEffect(() => {
@@ -338,8 +339,9 @@ function SoldForm({ children, data }: props) {
     let editedCompleteSoldForm
     if (id) {
       console.log('id for edit', id)
-      editedCompleteSoldForm = { ...completedSoldForm, id: id }
+      editedCompleteSoldForm = { ...completedSoldForm, id: id, inventory: 0 }
       console.log('edited completed sold form', editedCompleteSoldForm)
+      setSoldItem(item)
       mutateEditBoughtTransaction.mutate(editedCompleteSoldForm)
     } else if (boughtId) {
       const boughtToSoldForm = {
@@ -384,9 +386,23 @@ function SoldForm({ children, data }: props) {
       setSelectedOption('nofee')
       queryClient.invalidateQueries(['items'])
       queryClient.invalidateQueries(['item'])
-      notify('success', `${soldItem} has been added to the ledger`)
+
+      setTimeout(() => {
+        console.log('item from the timeout SOLDITEM variable', soldItem)
+        notifyTest()
+        // notify({
+        //   type: 'success',
+        //   text: `${soldItem} has been added to the ledger`,
+        // })
+      }, 500)
     },
   })
+
+  const notifyTest = () => {
+    const text = `${soldItem} has been added to the ledger`
+    console.log('testing notifyTest', text)
+    notify({ type: 'success', text: text })
+  }
 
   const mutateEditBoughtTransaction = useMutation({
     mutationFn: (
@@ -402,7 +418,11 @@ function SoldForm({ children, data }: props) {
       // }
     ) => patchFormData(editedCompleteSoldForm),
     onSuccess: () => {
-      notify('success', `${data?.item} has been updated`)
+      setTimeout(() => {
+        console.log('item from the timeout data?.item variable', data?.item)
+        notify({ type: 'success', text: `${data?.item} has been updated` })
+      }, 500)
+
       queryClient.invalidateQueries(['item'])
       queryClient.invalidateQueries(['items'])
     },
@@ -423,8 +443,8 @@ function SoldForm({ children, data }: props) {
   return (
     <div>
       {data != null ? (
-        <div className="flex flex-col gap-20 justify-center items-center">
-          <ToastContainer position="top-center" />
+        <div className="flex flex-col gap-20 justify-center items-center mt-16">
+          {/* <ToastContainer position="top-center" /> */}
           <form onSubmit={(e) => handleSubmit(e)}>
             <div className="relative flex flex-col bg-clip-border rounded-xl bg-[#31363F] text-white shadow-gray-900/60 shadow-lg sm:w-full sm:p-8 p-8 pb-10">
               <p className="text-center mb-5 text-4xl font-jersey-25 uppercase">
@@ -605,8 +625,8 @@ function SoldForm({ children, data }: props) {
           </form>
         </div>
       ) : (
-        <div className="flex flex-col gap-20 justify-center items-center">
-          <ToastContainer position="top-center" />
+        <div className="flex flex-col gap-20 justify-center items-center mt-16">
+          {/* <ToastContainer position="top-center" /> */}
           <form onSubmit={(e) => handleSubmit(e)}>
             <div className="relative flex flex-col bg-clip-border rounded-xl bg-[#31363F] text-white shadow-gray-900/60 shadow-lg sm:w-full sm:p-8 p-8 pb-10">
               <p className="text-center mb-5 text-4xl font-jersey-25 uppercase">
