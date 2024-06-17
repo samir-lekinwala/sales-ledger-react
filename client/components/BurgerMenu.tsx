@@ -1,116 +1,203 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import {
+  IconButton,
+  Typography,
+  List,
+  ListItem,
+  ListItemPrefix,
+  ListItemSuffix,
+  Chip,
+  Drawer,
+  Card,
+  ThemeProvider,
+} from '@material-tailwind/react'
+import { InboxIcon } from '@heroicons/react/24/solid'
+import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
+import { Link, useLocation } from 'react-router-dom'
+import * as models from '../models/items.tsx'
+import Footer from './Footer.tsx'
+import {
+  combineData,
+  numberOfItemsInInventory,
+  numberOfItemsInLedger,
+} from '../functions/functions.tsx'
 
 interface Props {
-  burgermenuclick: React.Dispatch<React.SetStateAction<boolean>>
-  menuStatus: boolean
+  data: models.item[]
 }
 
-function BurgerMenu(props: Props) {
-  return (
-    <nav className="border-gray-200 bg-gray-50 dark:bg-gray-800 dark:border-gray-700">
-      <div className="max-w-screen-2xl flex flex-wrap items-center justify-between mx-auto p-4">
-        <Link
-          to="/"
-          className="flex items-center space-x-3 rtl:space-x-reverse"
-        >
-          <img
-            src="https://flowbite.com/docs/images/logo.svg"
-            className="h-8"
-            alt="Flowbite Logo"
-          />
-          <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">
-            Sales Ledger
-          </span>
-        </Link>
-        <button
-          onClick={() => props.burgermenuclick(!props.menuStatus)}
-          data-collapse-toggle="navbar-hamburger"
-          type="button"
-          className="inline-flex items-center justify-center p-2 w-10 h-10 text-sm text-gray-500 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
-          aria-controls="navbar-hamburger"
-          aria-expanded="true"
-        >
-          <span className="sr-only">Open main menu</span>
-          <svg
-            className="w-5 h-5"
-            aria-hidden="false"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 17 14"
-          >
-            <path
-              stroke="currentColor"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              d="M1 1h15M1 7h15M1 13h15"
-            />
-          </svg>
-        </button>
-        {props.menuStatus ? (
-          <div className="w-full" id="navbar-hamburger">
-            <ul className="flex flex-col font-medium mt-4 rounded-lg bg-gray-50 dark:bg-gray-800 dark:border-gray-700">
-              <li>
-                <Link
-                  to="/inventory"
-                  className="block py-2 px-3 text-white bg-blue-700 rounded dark:bg-blue-600"
-                  aria-current="page"
-                >
-                  Inventory
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="theledger"
-                  className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-                >
-                  The Ledger
-                </Link>
-              </li>
-              {/* <li>
-              <a
-                href="#"
-                className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 dark:text-gray-400 md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white"
-              >
-                Pricing
-              </a>
-            </li>
-            <li>
-              <a
-                href="#"
-                className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-              >
-                Contact
-              </a>
-            </li> */}
-            </ul>
-          </div>
-        ) : null}
-      </div>
-    </nav>
+export function BurgerMenu(props: Props) {
+  const location = useLocation()
+  const { pathname } = location
 
-    // <div>
-    //   <ul className="float-right">
-    //     <li>
-    //       <Link to="/" onClick={() => props.burgermenuclick()}>
-    //         Add Item
-    //       </Link>
-    //     </li>
-    //     <li>
-    //       <Link to="/inventory">Inventory</Link>
-    //     </li>
-    //     <li>
-    //       <Link to="theledger">The Ledger</Link>
-    //     </li>
-    //     <li>
-    //       <a href="#">Account</a>
-    //     </li>
-    //     <li>
-    //       <a href="#">Sign Out</a>
-    //     </li>
-    //   </ul>
-    // </div>
+  function checkPath() {
+    console.log('pathname', pathname)
+    if (pathname == '/theledger') {
+      setCurrentPath('ledger')
+    } else if (pathname == '/inventory') {
+      setCurrentPath('inventory')
+    } else if (pathname == '/completed') {
+      setCurrentPath('completed')
+    } else setCurrentPath(undefined)
+  }
+  useEffect(() => {
+    checkPath()
+  }, [pathname])
+
+  const [currentPath, setCurrentPath] = useState<string | null>()
+  console.log(currentPath)
+  const data = props.data
+
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false)
+
+  const numberOfCompleted = combineData(data).length
+
+  const customTheme = {
+    ...{
+      theme: {
+        colors: {
+          transparent: 'transparent',
+          black: '#000',
+          white: '#EEE',
+          gray: {
+            100: '#f7fafc',
+            // ...
+            900: '#1a202c',
+          },
+        },
+      },
+    },
+  }
+
+  // const handleOpen = (value) => {
+  //   setOpen(open === value ? 0 : value)
+  // }
+
+  const openDrawer = () => setIsDrawerOpen(true)
+  const closeDrawer = () => setIsDrawerOpen(false)
+
+  return (
+    <>
+      <ThemeProvider value={customTheme}>
+        <IconButton
+          variant="text"
+          size="lg"
+          onClick={openDrawer}
+          color="white"
+          className="relative bottom-2"
+        >
+          {isDrawerOpen ? (
+            <XMarkIcon className="h-8 w-8 stroke-2" />
+          ) : (
+            <Bars3Icon className="h-8 w-8 stroke-2" />
+          )}
+        </IconButton>
+        <Drawer open={isDrawerOpen} onClose={closeDrawer}>
+          <Card
+            color="transparent"
+            shadow={false}
+            className="h-[calc(100vh-2rem)] w-full p-4"
+          >
+            <Link to={`/`} onClick={closeDrawer}>
+              <div className="mb-2 justify-center flex flex-wrap flex-row p-4">
+                {/* <Logo
+                  width={60}
+                  colour="black"
+                  classes="justify-center flex flex-wrap flex-row h-8"
+                /> */}
+                <Typography
+                  variant="h5"
+                  color="black"
+                  className="font-poppins text-3xl"
+                >
+                  Sales Ledger
+                </Typography>
+              </div>
+            </Link>
+            {/* <div className="p-2">
+            <Input
+              icon={<MagnifyingGlassIcon className="h-5 w-5" />}
+              label="Search"
+            />
+          </div> */}
+            <List className="text-black">
+              <hr className="my-2 border-blue-gray-50" />
+
+              <Link to="/theledger" onClick={closeDrawer}>
+                <ListItem
+                  className={`${
+                    currentPath == 'ledger' ? 'bg-[#76ABAE] text-black' : null
+                  }`}
+                >
+                  <ListItemPrefix>
+                    <InboxIcon className="h-5 w-5" />
+                  </ListItemPrefix>
+                  Ledger
+                  <ListItemSuffix>
+                    <Chip
+                      value={numberOfItemsInLedger(data)}
+                      size="sm"
+                      variant="ghost"
+                      color="blue-gray"
+                      className="rounded-full"
+                    />
+                  </ListItemSuffix>
+                </ListItem>
+              </Link>
+              <Link to="/inventory" onClick={closeDrawer}>
+                <ListItem
+                  className={`${
+                    currentPath == 'inventory'
+                      ? 'bg-[#76ABAE] text-black'
+                      : null
+                  }`}
+                >
+                  <ListItemPrefix>
+                    <InboxIcon className="h-5 w-5" />
+                  </ListItemPrefix>
+                  Inventory
+                  <ListItemSuffix>
+                    <Chip
+                      value={numberOfItemsInInventory(data)}
+                      size="sm"
+                      variant="ghost"
+                      color="blue-gray"
+                      className="rounded-full"
+                    />
+                  </ListItemSuffix>
+                </ListItem>
+              </Link>
+              <Link to="/completed" onClick={closeDrawer}>
+                <ListItem
+                  className={`${
+                    currentPath == 'completed'
+                      ? 'bg-[#76ABAE] text-black'
+                      : null
+                  }`}
+                >
+                  <ListItemPrefix>
+                    <InboxIcon className="h-5 w-5" />
+                  </ListItemPrefix>
+                  Completed
+                  <ListItemSuffix>
+                    <Chip
+                      value={numberOfCompleted}
+                      size="sm"
+                      variant="ghost"
+                      color="blue-gray"
+                      className="rounded-full"
+                    />
+                  </ListItemSuffix>
+                </ListItem>
+              </Link>
+            </List>
+            <div className="relative top-[calc(80vh-250px)]">
+              <Footer colour={'black'} />
+            </div>
+          </Card>
+        </Drawer>
+      </ThemeProvider>
+    </>
   )
 }
 

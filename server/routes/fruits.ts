@@ -14,14 +14,38 @@ router.get('/', async (req, res) => {
     res.status(500).json({ message: 'Something went wrong' })
   }
 })
+router.get('/edit/:id', async (req, res) => {
+  try {
+    const id = Number(req.params.id)
+    const fruits = await db.getItem(id)
+
+    res.json(fruits)
+  } catch (error) {
+    console.log(error)
+    res.status(500).json({ message: 'Something went wrong' })
+  }
+})
+router.patch('/:id', async (req, res) => {
+  try {
+    const id = Number(req.params.id)
+    const data = await req.body
+    console.log('data console.log', data)
+    // const id = id
+    await db.updateItem(id, data)
+    res.json(200)
+  } catch (error) {
+    console.log(error)
+    res.status(500).json({ message: 'Something went wrong' })
+  }
+})
 
 router.post('/', async (req, res) => {
   try {
     const dataCheck = await req.body
     console.log(dataCheck)
-    await db.addItem(dataCheck)
-
-    res.sendStatus(201)
+    const response = await db.addItem(dataCheck)
+    res.json(response)
+    // res.sendStatus(201)
   } catch (error) {
     console.log(error)
     res.status(500).json({ message: 'Something went wrong' })

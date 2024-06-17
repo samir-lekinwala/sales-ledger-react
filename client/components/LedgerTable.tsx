@@ -1,10 +1,9 @@
-import React from 'react'
 import * as models from '../models/items'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { deleteItem } from '../apis/fruits'
-import LedgerFooter from './LedgerFooter'
+import { deleteItem } from '../apis/api.ts'
 import { dollarOrPercent, calculateFeesTotal } from '../functions/functions.tsx'
 import moment from 'moment'
+import { Link } from 'react-router-dom'
 
 interface Props {
   data: models.item[]
@@ -70,7 +69,7 @@ function LedgerTable(props: Props) {
   // }
   function addItemsToTable(item: models.item) {
     const feeDollarOrPercent = dollarOrPercent(item)
-    console.log(feeDollarOrPercent, item.item)
+    // console.log(feeDollarOrPercent, item.item)
     calculateFeesTotal(item)
     const fee = (item.price - calculateFeesTotal(item) - item.shipping).toFixed(
       2,
@@ -80,16 +79,14 @@ function LedgerTable(props: Props) {
     return (
       <tr
         key={item.id}
-        className="group bg-white border-b dark:bg-gray-800 dark:border-gray-700"
+        className="group border-b dark:bg-gray-800 dark:border-gray-700"
       >
-        <th
-          scope="row"
-          className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-        >
-          {item.item}
+        <th scope="row" className="px-6 py-4 font-medium dark:text-white">
+          <Link to={`/edit/${item.id}`}>{item.item}</Link>
           <button
             onClick={() => mutateDeleteTransaction.mutate(item.id)}
-            className="opacity-0 group-hover:opacity-100 ml-5 text-red-700 hover:text-white border border-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:hover:bg-red-600 dark:focus:ring-red-900"
+            className="group-hover:opacity-100 opacity-0 ml-5 text-red-600 hover:text-white border border-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:hover:bg-red-600 dark:focus:ring-red-900"
+            // className="transition-opacity group-hover:opacity-50 ml-5 text-red-700 hover:text-white border border-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:hover:bg-red-600 dark:focus:ring-red-900"
           >
             Delete
           </button>
@@ -126,23 +123,29 @@ function LedgerTable(props: Props) {
     )
   }
 
+  const tableHeaders = [
+    'Item',
+    'Date',
+    'Price',
+    'Shipping',
+    'Fee',
+    'Price after Fees/Shipping',
+    'Platform',
+    'Sold / Bought',
+  ]
+
   return (
     <div>
       <h1 className="text-white">The Ledger</h1>
       <div className="max-h-[calc(85vh-100px)] relative overflow-x-auto shadow-md sm:rounded-lg">
-        <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+        <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 rounded-3xl ">
           <thead className="sticky top-0 text-m text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
             <tr>
-              <th scope="col" className="px-3 py-3">
-                Item
-              </th>
-              <th className="px-3">Date Created</th>
-              <th className="px-3">Price</th>
-              <th className="px-3">Shipping</th>
-              <th className="px-3">Fee</th>
-              <th className="px-3">Price after Fees/Shipping</th>
-              <th className="px-3">Platform</th>
-              <th className="px-3">Sold / Bought</th>
+              {tableHeaders.map((header) => (
+                <th key={header} className="px-4 py-2">
+                  {header}
+                </th>
+              ))}
             </tr>
           </thead>
           <tbody>{data.map((item) => addItemsToTable(item))}</tbody>

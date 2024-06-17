@@ -1,7 +1,15 @@
-import BuyorSell from './BuyorSell'
+import Footer from './Footer'
+import HorizontalCard from './HorizontalCard'
+import Jumbotron from './Jumbotron'
 
 function Home() {
-  return <BuyorSell />
+  return (
+    <>
+      <Jumbotron />
+      {/* <HorizontalCard /> */}
+      <Footer colour="white" />
+    </>
+  )
 }
 
 export default Home

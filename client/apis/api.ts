@@ -4,10 +4,20 @@ import * as models from '../models/items.tsx'
 const rootUrl = '/api/v1'
 
 export async function postFormData(data: models.item) {
-  return request.post(rootUrl + '/bought').send(data)
+  return request
+    .post(rootUrl + '/bought')
+    .send(data)
+    .then((test) => JSON.parse(test.text))
+}
+export async function patchFormData(data: models.editedItem) {
+  console.log('data from fruits', data)
+  return request.patch(rootUrl + `/bought/${data.id}`).send(data)
 }
 export async function getAllItems() {
   return request.get(rootUrl + '/bought')
+}
+export async function getItem(id: number) {
+  return request.get(rootUrl + `/bought/edit/${id}`)
 }
 export async function deleteItem(id: number) {
   return request.delete(rootUrl + `/delete/${id}`)

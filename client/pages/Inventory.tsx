@@ -1,7 +1,5 @@
-import React from 'react'
-import BuyorSell from '../components/BuyorSell'
 import { useQuery } from '@tanstack/react-query'
-import { getAllItems } from '../apis/fruits'
+import { getAllItems } from '../apis/api.ts'
 import LedgerFooter from '../components/LedgerFooter'
 import InventoryTable from '../components/InventoryTable.tsx'
 
@@ -15,8 +13,7 @@ function Inventory() {
 
   return (
     <>
-      <BuyorSell />
-      <InventoryTable data={data.body} />
+      <InventoryTable page={'inventory'} data={data.body} />
       <LedgerFooter data={data.body} />
     </>
   )
