@@ -1,6 +1,6 @@
 import { Menu, MenuHandler, MenuList, MenuItem } from '@material-tailwind/react'
 import { item } from '../models/items'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { deleteItem } from '../apis/api'
 
@@ -12,11 +12,15 @@ interface props {
 function InventoryMenu(props: props) {
   const { item, selectedArray } = props
 
+  const location = useLocation()
+  const { pathname } = location
+
   const queryClient = useQueryClient()
   const mutateDeleteTransaction = useMutation({
     mutationFn: (id: number) => deleteItem(id),
     onSuccess: () => {
       queryClient.invalidateQueries(['items'])
+      queryClient.invalidateQueries(['item'])
     },
   })
   console.log('selected array', selectedArray)
@@ -26,7 +30,12 @@ function InventoryMenu(props: props) {
       for (let i = 0; i < array.length; i++) {
         mutateDeleteTransaction.mutate(array[i])
       }
-    } else mutateDeleteTransaction.mutate(item.id)
+    } else if (pathname == '/completed') {
+      mutateDeleteTransaction.mutate(item.id)
+      mutateDeleteTransaction.mutate(item.boughtItem.id)
+    } else {
+      mutateDeleteTransaction.mutate(item.id)
+    }
   }
 
   return (

@@ -25,7 +25,12 @@ function Layout() {
   return (
     <div>
       <Heading />
-      <ToastContainer position="top-center" draggablePercent={50} />
+      <ToastContainer
+        draggable
+        stacked
+        position="top-center"
+        draggablePercent={50}
+      />
       <BurgerMenu data={data.body} />
       <Outlet />
       <SpeedDialPlacement />

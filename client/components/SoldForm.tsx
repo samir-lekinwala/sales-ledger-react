@@ -83,7 +83,7 @@ function SoldForm({ children, data }: props) {
   // const [tempData2, setTempData2] = useState()
   const [customFeeAmount, setCustomFeeAmount] = useState(0)
   const [id, setId] = useState<number | null>()
-  const [soldItem, setSoldItem] = useState()
+  const [soldItem, setSoldItem] = useState(data?.item)
   const [notifyText, setNotifyText] = useState()
   // const [tempShipping, setTempShipping] = useState(testingData)
 
@@ -103,7 +103,9 @@ function SoldForm({ children, data }: props) {
   function getId() {
     if (data?.id) {
       setId(data.id)
-      console.log('console.log item id', id)
+      setSoldItem(data.item)
+      console.log('getId func sold item', soldItem)
+      // console.log('console.log item id', id)
     }
   }
   // useEffect(() => {
@@ -139,8 +141,6 @@ function SoldForm({ children, data }: props) {
       setCustomFeeAmount(0)
       setAdditionalInputVisible(false)
     }
-    console.log('selectedoption from func', selectedOption)
-    console.log('customfeeamount', customFeeAmount)
   }
 
   function selectedPlatformIfDataExists() {
@@ -218,7 +218,7 @@ function SoldForm({ children, data }: props) {
     const form = new FormData(target)
     // console.log(form)
     const item = form.get('itemsold')?.valueOf() as string
-    setSoldItem(item)
+    // setSoldItem(item)
     const price = Number(form.get('howmuch')?.valueOf() as string)
     // const platform = form.get('platform')?.valueOf() as string
     const platform = selectedOption
@@ -341,7 +341,7 @@ function SoldForm({ children, data }: props) {
       console.log('id for edit', id)
       editedCompleteSoldForm = { ...completedSoldForm, id: id, inventory: 0 }
       console.log('edited completed sold form', editedCompleteSoldForm)
-      setSoldItem(item)
+      // setSoldItem(item)
       mutateEditBoughtTransaction.mutate(editedCompleteSoldForm)
     } else if (boughtId) {
       const boughtToSoldForm = {
@@ -349,7 +349,11 @@ function SoldForm({ children, data }: props) {
         bought_Id: Number(boughtId),
       }
       console.log(boughtToSoldForm)
-      mutateEditBoughtTransaction.mutate({ id: Number(boughtId), inventory: 0 })
+      mutateEditBoughtTransaction.mutate({
+        id: Number(boughtId),
+        inventory: 0,
+        item: item,
+      })
       mutateAddSoldTransaction.mutate(boughtToSoldForm)
       navigate('/inventory')
       target.reset()
@@ -373,13 +377,13 @@ function SoldForm({ children, data }: props) {
       //   fee: number
       // }
     ) => postFormData(completedBoughtForm),
-    onSuccess: (e) => {
+    onSuccess: (item) => {
       if (boughtId) {
         mutateEditBoughtTransaction.mutate({
           id: Number(boughtId),
-          bought_Id: Number(e),
+          bought_Id: Number(item.id),
         })
-        console.log('console logging e', e)
+        console.log('console logging item', item)
       }
       setAdditionalInputVisible(false)
       setShippingInputVisible(false)
@@ -388,21 +392,13 @@ function SoldForm({ children, data }: props) {
       queryClient.invalidateQueries(['item'])
 
       setTimeout(() => {
-        console.log('item from the timeout SOLDITEM variable', soldItem)
-        notifyTest()
-        // notify({
-        //   type: 'success',
-        //   text: `${soldItem} has been added to the ledger`,
-        // })
+        notify({
+          type: 'success',
+          text: `${item.item} has been added to the ledger`,
+        })
       }, 500)
     },
   })
-
-  const notifyTest = () => {
-    const text = `${soldItem} has been added to the ledger`
-    console.log('testing notifyTest', text)
-    notify({ type: 'success', text: text })
-  }
 
   const mutateEditBoughtTransaction = useMutation({
     mutationFn: (
@@ -417,12 +413,16 @@ function SoldForm({ children, data }: props) {
       //   platform: string
       // }
     ) => patchFormData(editedCompleteSoldForm),
-    onSuccess: () => {
-      setTimeout(() => {
-        console.log('item from the timeout data?.item variable', data?.item)
-        notify({ type: 'success', text: `${data?.item} has been updated` })
-      }, 500)
-
+    onSuccess: (e) => {
+      if (!boughtId) {
+        console.log('e', e.body[0].item)
+        setTimeout(() => {
+          notify({
+            type: 'success',
+            text: `${e.body[0].item} has been updated`,
+          })
+        }, 500)
+      }
       queryClient.invalidateQueries(['item'])
       queryClient.invalidateQueries(['items'])
     },
@@ -643,6 +643,7 @@ function SoldForm({ children, data }: props) {
                   color="white"
                   crossOrigin={undefined}
                   value={boughtId ? boughtData?.item : undefined}
+                  required
                 ></Input>
                 <Input
                   className="focus:ring-0 block w-half p-4 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-md focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
@@ -653,6 +654,7 @@ function SoldForm({ children, data }: props) {
                   label="For how much?"
                   color="white"
                   crossOrigin={undefined}
+                  required
                 ></Input>
                 <div className="w-full">
                   <Select

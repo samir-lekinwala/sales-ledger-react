@@ -48,7 +48,7 @@ export default function InventoryTable(props: Props) {
     // const filtered = boughtItemsFilter()
     setStoredData(boughtItemsFilter())
     getBoughtIdArray()
-    console.log('boughtidarray', boughtIdArray)
+    // console.log('boughtidarray', boughtIdArray)
 
     // addNetPriceToData()
   }, [props.data])
@@ -68,7 +68,7 @@ export default function InventoryTable(props: Props) {
 
   function tableHeadersBasedOnPage() {
     if (page == 'inventory') {
-      console.log('props inventory page')
+      // console.log('props inventory page')
       return [
         'Item',
         'Date',
@@ -80,7 +80,7 @@ export default function InventoryTable(props: Props) {
         // 'Platform',
       ]
     } else if (page == 'ledger') {
-      console.log('props ledger page')
+      // console.log('props ledger page')
       return [
         'Item',
         'Date',
@@ -93,7 +93,7 @@ export default function InventoryTable(props: Props) {
         'Sold / Bought',
       ]
     } else if (page == 'completed') {
-      console.log('props completed page')
+      // console.log('props completed page')
       return ['Item', 'Date sold', 'Bought Price', 'Sold Price', 'Profit']
     }
   }
@@ -154,7 +154,7 @@ export default function InventoryTable(props: Props) {
       setRowHighlighted((rowHighlighted) => [...tempArray])
     } else setRowHighlighted((rowHighlighted) => [...rowHighlighted, itemId])
 
-    console.log('rowhighlighted', rowHighlighted)
+    // console.log('rowhighlighted', rowHighlighted)
   }
 
   function idIncludedInSelected(element) {

@@ -32,7 +32,7 @@ router.patch('/:id', async (req, res) => {
     console.log('data console.log', data)
     // const id = id
     await db.updateItem(id, data)
-    res.json(200)
+    res.json([data, 200])
   } catch (error) {
     console.log(error)
     res.status(500).json({ message: 'Something went wrong' })

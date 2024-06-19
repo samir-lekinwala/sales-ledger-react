@@ -45,7 +45,7 @@ export function BurgerMenu(props: Props) {
   }, [pathname])
 
   const [currentPath, setCurrentPath] = useState<string | null>()
-  console.log(currentPath)
+  // console.log(currentPath)
   const data = props.data
 
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
