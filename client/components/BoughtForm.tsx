@@ -100,10 +100,10 @@ function BoughtForm({ children, data }: props) {
       //   shipping: number
       //   potentialSalePrice: number
       // }
-    ) =>
-      postFormData(completedBoughtForm).then((test) =>
-        console.log('testtttt', test),
-      ),
+    ) => postFormData(completedBoughtForm),
+    // .then((test) =>
+    // console.log('testtttt', test),
+    // )
     onSuccess: () => {
       queryClient.invalidateQueries(['items'])
     },
