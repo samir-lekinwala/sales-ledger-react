@@ -15,7 +15,7 @@ export default defineConfig({
   build: {
     rollupOptions: {
       external: [
-        'node_modules/@material-tailwind/html@latest/scripts/tooltip.js',
+        './node_modules/@material-tailwind/html@latest/scripts/tooltip.js',
       ],
     },
   },
