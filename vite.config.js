@@ -12,4 +12,11 @@ export default defineConfig({
       '/api': 'http://localhost:3000',
     },
   },
+  build: {
+    rollupOptions: {
+      external: [
+        'node_modules/@material-tailwind/html@latest/scripts/tooltip.js',
+      ],
+    },
+  },
 })
